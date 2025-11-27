@@ -5,17 +5,16 @@ import { ServicosService } from '../../services/servicos.service';
 
 @Component({
   selector: 'app-servicos',
-  imports: [],
   templateUrl: './servicos.html',
-  styleUrl: './servicos.css',
+  styleUrls: ['./servicos.css'],
 })
-export class Servicos {
+export class Servicos implements OnInit {
   Servico: Servico[] = [];
   formGroupServico: FormGroup;
-  isEditing: boolean = false;
+  isEditing = false;
   filtro: FormGroup;
 
-  constructor(private gerenciarServicos: ServicosService, private formBuilder: FormBuilder) {
+  constructor(private gerenciarServicos: ServicosService,private formBuilder: FormBuilder) {
     this.formGroupServico = this.formBuilder.group({
       id: [''],
       nome: [''],
@@ -23,23 +22,20 @@ export class Servicos {
       tipo: [''],
       valor: [''],
       custo: [''],
-      responsavel: ['']
-    })
+      responsavel: [''],
+    });
 
     this.filtro = this.formBuilder.group({
       tipo: [''],
       busca: [''],
       categoria: [''],
-      ordenarAZ: [false]
+      ordenarAZ: [false],
     });
   }
 
   ngOnInit(): void {
     this.loadServicos();
-
-    this.filtro.valueChanges.subscribe(() => {
-      this.loadServicos();
-    });
+    this.filtro.valueChanges.subscribe(() => this.loadServicos());
   }
 
   loadServicos() {
@@ -48,14 +44,16 @@ export class Servicos {
     const categoria = this.filtro.get('categoria')?.value;
     const ordenarAZ = this.filtro.get('ordenarAZ')?.value;
 
-    this.gerenciarServicos.filtrarServico(tipo, busca, categoria, ordenarAZ).subscribe({
-      next: json => this.Servico = json
-    });
+    this.gerenciarServicos
+      .filtrarServico(tipo, busca, categoria, ordenarAZ)
+      .subscribe({
+        next: json => (this.Servico = json),
+      });
   }
 
   delete(servico: Servico) {
     this.gerenciarServicos.delete(servico).subscribe({
-      next: () => this.loadServicos
+      next: () => this.loadServicos(),
     });
   }
 
@@ -69,7 +67,7 @@ export class Servicos {
       next: () => {
         this.loadServicos();
         this.clear();
-      }
+      },
     });
   }
 
@@ -78,7 +76,7 @@ export class Servicos {
     this.formGroupServico.reset();
   }
 
-  toggleOrdem(): void {
+  toggleOrdem() {
     const atual = this.filtro.get('ordenarAZ')?.value;
     this.filtro.get('ordenarAZ')?.setValue(!atual);
   }
@@ -87,9 +85,9 @@ export class Servicos {
     const tipo = this.filtro.get('tipo')?.value;
     const categoria = this.filtro.get('categoria')?.value;
 
-    return this.Servico.filter(servico => {
-      const tipoMatch = tipo ? servico.tipo === tipo : true;
-      const categoriaMatch = categoria ? servico.categoria === categoria : true;
+    return this.Servico.filter(s => {
+      const tipoMatch = tipo ? s.tipo === tipo : true;
+      const categoriaMatch = categoria ? s.categoria === categoria : true;
       return tipoMatch && categoriaMatch;
     });
   }
