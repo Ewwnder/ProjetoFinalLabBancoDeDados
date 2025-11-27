@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { OrdemServico } from './components/ordem-servico/ordem-servico';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   imports: [RouterOutlet, OrdemServico],
   templateUrl: './app.component.html',
