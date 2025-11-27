@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Servico } from '../../../entity/servico';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ServicosService } from '../../services/servicos.service';
+import { Servico } from '../../../entity/servico';
 
 @Component({
   selector: 'app-servicos',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './servicos.html',
   styleUrls: ['./servicos.css'],
 })
