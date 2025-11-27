@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-servicos',
@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './servicos.html',
   styleUrl: './servicos.css',
 })
-export class Servicos {
+export class Servicos{
 
 }
