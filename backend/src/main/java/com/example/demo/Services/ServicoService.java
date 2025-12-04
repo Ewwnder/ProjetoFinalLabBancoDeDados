@@ -30,7 +30,7 @@ public class ServicoService {
 
     public Servico save(Servico servico) {
         if (servico.getId() == null) {
-            servico.setId(UUID.randomUUID()); // garante UUID se não tiver
+            servico.setId(UUID.randomUUID());
         }
         return repositorioServico.save(servico);
     }
