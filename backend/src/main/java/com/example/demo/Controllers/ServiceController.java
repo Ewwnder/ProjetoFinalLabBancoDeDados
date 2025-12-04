@@ -1,9 +1,10 @@
-package com.example.demo.Controllers;
+package com.example.demo.controllers;
 
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Entities.Servico;
-import com.example.demo.Services.ServicoService;
+import com.example.demo.entities.Servico;
+import com.example.demo.services.ServicoService;
 
 @RestController
 @RequestMapping("/servicos")
@@ -27,28 +28,29 @@ public class ServiceController {
     private ServicoService servicoService;
 
     @GetMapping
-    public List<Servico> filtrar(
+    public ResponseEntity<List<Servico>> filtrar(
         @RequestParam(required = false) String tipo,
         @RequestParam(required = false) String busca,
         @RequestParam(required = false) String categoria,
         @RequestParam(required = false) Boolean ordenarAZ
     ) {
-        return servicoService.filtroContatos(tipo, busca, categoria, ordenarAZ);
+        return ResponseEntity.ok(servicoService.filtroContatos(tipo, busca, categoria, ordenarAZ));
     }
 
     @PostMapping
-    public Servico inserir(@RequestBody Servico servico){
-        return servicoService.save(servico);
+    public ResponseEntity<Servico> inserir(@RequestBody Servico servico){
+        return ResponseEntity.created(null).body(servicoService.save(servico));
     }
 
     @PutMapping("/{id}")
-    public Servico alterar(@PathVariable UUID id, @RequestBody Servico servico){
+    public ResponseEntity<Servico> alterar(@PathVariable String id, @RequestBody Servico servico){
         servico.setId(id);
-        return servicoService.save(servico);
+        return ResponseEntity.ok(servicoService.save(servico));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id){
+    public ResponseEntity<Void> delete(@PathVariable String id){
         servicoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

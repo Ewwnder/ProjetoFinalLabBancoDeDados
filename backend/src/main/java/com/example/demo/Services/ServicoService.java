@@ -1,4 +1,4 @@
-package com.example.demo.Services;
+package com.example.demo.services;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,8 +10,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
-import com.example.demo.Entities.Servico;
-import com.example.demo.Repositories.ServicoRepository;
+import com.example.demo.entities.Servico;
+import com.example.demo.repositories.ServicoRepository;
 
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -29,13 +29,10 @@ public class ServicoService {
     }
 
     public Servico save(Servico servico) {
-        if (servico.getId() == null) {
-            servico.setId(UUID.randomUUID());
-        }
         return repositorioServico.save(servico);
     }
 
-    public void delete(UUID id) {
+    public void delete(String id) {
         repositorioServico.deleteById(id);
     }
 

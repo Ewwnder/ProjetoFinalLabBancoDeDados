@@ -13,7 +13,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "com.example.springdatamongodb.repository")
+@EnableMongoRepositories(basePackages = "com.example.demo.repositories")
 @EnableTransactionManagement
 public class MongoDBDataSourceConfig extends AbstractMongoClientConfiguration {
     @Value("${db.config.uri}")
