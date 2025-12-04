@@ -5,12 +5,12 @@
       <h1 class="text-center mb-4">Serviços Cadastrados</h1>
 
       <div class="text-end mb-3">
-        <button class="btn btn-success" routerLink="/cadastro">Acrescentar Serviço</button>
+        <button class="btn btn-success" (click)="startAdding()">Acrescentar Serviço</button>
       </div>
 
-      <form class="card shadow-sm p-3 mb-4 border">
+      <!-- Filtros -->
+      <form class="card shadow-sm p-3 mb-4 border" [formGroup]="filtro">
         <div class="row g-2 align-items-center">
-
           <div class="col-md-6 col-lg-4">
             <label class="form-label">Filtrar</label>
             <input formControlName="busca" type="text" class="form-control" placeholder="Buscar..." />
@@ -44,10 +44,69 @@
               <i class="bi bi-sort-alpha-down"></i>
             </button>
           </div>
-
         </div>
       </form>
 
+      <!-- Formulário de Adicionar / Editar -->
+      <div *ngIf="isAdding || isEditing" class="card shadow-sm p-3 mb-4 border">
+        <h5>{{ isAdding ? 'Adicionar Serviço' : 'Editar Serviço' }}</h5>
+        <form [formGroup]="formGroupServico" (ngSubmit)="isAdding ? save() : update()">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label>Nome</label>
+              <input formControlName="nome" type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+              <label>Valor</label>
+              <input formControlName="valor" type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+              <label>Custo</label>
+              <input formControlName="custo" type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Categoria</label>
+              <select formControlName="categoria" class="form-select">
+                <option value="">Selecione</option>
+                <option>Cabeleireiro</option>
+                <option>Esteticista</option>
+                <option>Podologo</option>
+                <option>Manicure</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label>Tipo</label>
+              <select formControlName="tipo" class="form-select">
+                <option value="">Selecione</option>
+                <option>Capilar</option>
+                <option>Facial</option>
+                <option>Pés</option>
+                <option>Corporal</option>
+                <option>Mãos</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label>Responsável</label>
+              <input formControlName="responsavel" type="text" class="form-control" />
+            </div>
+
+            <div class="col-12 d-flex gap-2 mt-2">
+              <button type="submit" class="btn btn-success">💾 Salvar</button>
+              <button type="button" class="btn btn-secondary" (click)="clear()">Cancelar</button>
+              <button *ngIf="isEditing" type="button" class="btn btn-danger ms-auto" (click)="delete(formGroupServico.value)">
+                🗑️ Excluir
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tabela de Serviços -->
       <div class="table-responsive">
         <table class="table table-hover table-striped align-middle shadow-sm rounded">
           <thead class="table-light">
@@ -64,84 +123,18 @@
           </thead>
 
           <tbody>
-
-            @for (c of filtrarServicos; track c.id) {
-              <tr>
-                <th>{{ c.id }}</th>
-                <td>{{ c.nome }}</td>
-                <td>{{ c.categoria }}</td>
-                <td>{{ c.tipo }}</td>
-                <td>{{ c.valor }}</td>
-                <td>{{ c.custo }}</td>
-                <td>{{ c.responsavel }}</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary" (click)="onClickUpdate(c)">✏️ Editar</button>
-                </td>
-              </tr>
-
-              @if (isEditing && formGroupServico.get('id')?.value === c.id) {
-                <tr>
-                  <td colspan="8">
-                    <form (ngSubmit)="update()">
-                      <div class="row g-3">
-
-                        <div class="col-md-4">
-                          <label>Nome</label>
-                          <input formControlName="nome" type="text" class="form-control" />
-                        </div>
-
-                        <div class="col-md-4">
-                          <label>Valor</label>
-                          <input formControlName="valor" type="text" class="form-control" />
-                        </div>
-
-                        <div class="col-md-4">
-                          <label>Custo</label>
-                          <input formControlName="custo" type="text" class="form-control" />
-                        </div>
-
-                        <div class="col-md-6">
-                          <label>Categoria</label>
-                          <select formControlName="categoria" class="form-select">
-                            <option value="">Selecione</option>
-                            <option>Cabeleireiro</option>
-                            <option>Esteticista</option>
-                            <option>Podologo</option>
-                            <option>Manicure</option>
-                          </select>
-                        </div>
-
-                        <div class="col-md-6">
-                          <label>Tipo</label>
-                          <select formControlName="tipo" class="form-select">
-                            <option value="">Selecione</option>
-                            <option>Capilar</option>
-                            <option>Facial</option>
-                            <option>Pés</option>
-                            <option>Corporal</option>
-                            <option>Mãos</option>
-                          </select>
-                        </div>
-
-                        <div class="col-md-6">
-                          <label>Responsável</label>
-                          <input formControlName="responsavel" type="text" class="form-control" />
-                        </div>
-
-                        <div class="col-12 d-flex gap-2 mt-2">
-                          <button type="submit" class="btn btn-success">💾 Salvar</button>
-                          <button type="button" class="btn btn-secondary" (click)="clear()">Cancelar</button>
-                          <button type="button" class="btn btn-danger ms-auto" (click)="delete(c)">🗑️ Excluir</button>
-                        </div>
-
-                      </div>
-                    </form>
-                  </td>
-                </tr>
-              }
-
-            }
-
+            <tr *ngFor="let c of filtrarServicos; trackBy: trackById">
+              <th>{{ c.id }}</th>
+              <td>{{ c.nome }}</td>
+              <td>{{ c.categoria }}</td>
+              <td>{{ c.tipo }}</td>
+              <td>{{ c.valor }}</td>
+              <td>{{ c.custo }}</td>
+              <td>{{ c.responsavel }}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary" (click)="startEditing(c)">✏️ Editar</button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

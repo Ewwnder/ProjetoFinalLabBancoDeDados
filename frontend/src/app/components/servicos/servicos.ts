@@ -15,9 +15,11 @@ export class Servicos implements OnInit {
   Servico: Servico[] = [];
   formGroupServico: FormGroup;
   isEditing = false;
+  isAdding = false;
+
   filtro: FormGroup;
 
-  constructor(private gerenciarServicos: ServicosService,private formBuilder: FormBuilder) {
+  constructor(private gerenciarServicos: ServicosService, private formBuilder: FormBuilder) {
     this.formGroupServico = this.formBuilder.group({
       id: [''],
       nome: [''],
@@ -41,6 +43,10 @@ export class Servicos implements OnInit {
     this.filtro.valueChanges.subscribe(() => this.loadServicos());
   }
 
+  trackById(index: number, item: Servico) {
+    return item.id;
+  }
+
   loadServicos() {
     const tipo = this.filtro.get('tipo')?.value;
     const busca = this.filtro.get('busca')?.value;
@@ -49,20 +55,27 @@ export class Servicos implements OnInit {
 
     this.gerenciarServicos
       .filtrarServico(tipo, busca, categoria, ordenarAZ)
-      .subscribe({
-        next: json => (this.Servico = json),
-      });
+      .subscribe({ next: (json) => (this.Servico = json) });
   }
 
-  delete(servico: Servico) {
-    this.gerenciarServicos.delete(servico).subscribe({
-      next: () => this.loadServicos(),
-    });
+  startAdding() {
+    this.isAdding = true;
+    this.formGroupServico.reset();
   }
 
-  onClickUpdate(servico: Servico) {
+  startEditing(servico: Servico) {
     this.isEditing = true;
+    this.isAdding = false;
     this.formGroupServico.setValue(servico);
+  }
+
+  save() {
+    this.gerenciarServicos.save(this.formGroupServico.value).subscribe({
+      next: () => {
+        this.loadServicos();
+        this.clear();
+      },
+    });
   }
 
   update() {
@@ -74,8 +87,13 @@ export class Servicos implements OnInit {
     });
   }
 
+  delete(servico: Servico) {
+    this.gerenciarServicos.delete(servico).subscribe({ next: () => this.loadServicos() });
+  }
+
   clear() {
     this.isEditing = false;
+    this.isAdding = false;
     this.formGroupServico.reset();
   }
 
@@ -88,7 +106,7 @@ export class Servicos implements OnInit {
     const tipo = this.filtro.get('tipo')?.value;
     const categoria = this.filtro.get('categoria')?.value;
 
-    return this.Servico.filter(s => {
+    return this.Servico.filter((s) => {
       const tipoMatch = tipo ? s.tipo === tipo : true;
       const categoriaMatch = categoria ? s.categoria === categoria : true;
       return tipoMatch && categoriaMatch;
