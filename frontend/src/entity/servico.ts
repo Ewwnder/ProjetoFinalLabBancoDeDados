@@ -1,5 +1,5 @@
 export interface Servico{
-    id: number,
+    id: string,
     nome: string,
     categoria: string,
     tipo: string,
