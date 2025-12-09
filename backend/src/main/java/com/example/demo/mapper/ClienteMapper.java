@@ -14,6 +14,7 @@ public class ClienteMapper {
     public Cliente toEntity(ClienteRequestDTO request){
         Cliente cliente = new Cliente();
         cliente.setCpf(request.cpf());
+        cliente.setNome(request.nome());
         cliente.setEmail(request.email());
         cliente.setTelefone(request.telefone());
         cliente.setSexo(request.sexo());
