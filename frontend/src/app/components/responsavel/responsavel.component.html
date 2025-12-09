@@ -1,124 +1,166 @@
-<div class="container py-4">
+<div class="container py-5">
   <div class="row">
     <div class="col-12 col-lg-10 m-auto">
-
-      <h1 class="text-center mb-4">Responsáveis Cadastrados</h1>
-
-      <div class="text-end mb-3">
-        <button class="btn btn-success" (click)="iniciarAdicao()">Adicionar Responsável</button>
+      
+      <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-3">
+        <h1 class="h2 mb-0 text-dark fw-light">
+          Gerenciamento de Responsáveis
+        </h1>
+        <button 
+          class="btn btn-primary px-4 d-flex align-items-center fw-semibold" 
+          (click)="iniciarAdicao()"
+        >
+          <i class="bi bi-plus me-2 fs-5"></i>
+          Adicionar Responsável
+        </button>
       </div>
 
-      <form class="card shadow-sm p-3 mb-4 border" [formGroup]="filtro">
-        <div class="row g-2 align-items-center">
-          <div class="col-md-6 col-lg-4">
-            <label class="form-label">Filtrar (Nome / Email)</label>
-            <input
-              formControlName="busca"
-              type="text"
-              class="form-control"
-              placeholder="Buscar..."
-            />
+      <hr>
+
+      <form class="card shadow-sm p-3 mb-5 border-0" [formGroup]="filtro">
+        <div class="row g-3 align-items-end">
+          
+          <div class="col-md-8 col-lg-9">
+            <label class="form-label fw-semibold text-muted">Filtrar (Nome ou Email)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0">
+                <i class="bi bi-search"></i>
+              </span>
+              <input
+                formControlName="busca"
+                type="text"
+                class="form-control border-start-0"
+                placeholder="Digite o nome ou email para buscar..."
+              />
+            </div>
           </div>
 
-          <div class="col-12 text-end mt-2">
-            <button type="button" class="btn btn-outline-primary" (click)="alternarOrdem()">
-              <i class="bi bi-sort-alpha-down"></i>
-              Ordenar {{ filtro.get('ordenarAZ')?.value ? '(A-Z)' : '(Normal)' }}
+          <div class="col-md-4 col-lg-3 text-md-end">
+            <button 
+                type="button" 
+                class="btn btn-outline-secondary w-100" 
+                (click)="alternarOrdem()"
+            >
+              <i 
+                class="bi me-2" 
+                [ngClass]="{ 
+                  'bi-sort-alpha-down-alt': filtro.get('ordenarAZ')?.value, 
+                  'bi-sort-alpha-up-alt': !filtro.get('ordenarAZ')?.value 
+                }"
+              ></i>
+              Ordem: {{ filtro.get('ordenarAZ')?.value ? 'Nome (A-Z)' : 'Padrão (ID)' }}
             </button>
           </div>
+          
         </div>
       </form>
 
-      <div *ngIf="isAdicionando || isEditando" class="card shadow-sm p-3 mb-4 border">
-        <h5>{{ isAdicionando ? 'Adicionar Responsável' : 'Editar Responsável' }}</h5>
+      <div *ngIf="isAdicionando || isEditando" class="card shadow p-4 mb-5 border-0 bg-light">
+        <h4 class="card-title mb-4 border-bottom pb-2">
+          <i class="bi bi-file-earmark-person me-2 text-primary"></i>
+          {{ isAdicionando ? 'Cadastro de Novo Responsável' : 'Edição de Dados' }}
+        </h4>
 
         <form [formGroup]="formulario" (ngSubmit)="isAdicionando ? salvar() : atualizar()">
-          <div class="row g-3">
+          <div class="row g-4">
 
             <div class="col-md-6">
-              <label>Nome</label>
+              <label class="form-label fw-medium">Nome Completo</label>
               <input formControlName="nome" type="text" class="form-control" />
             </div>
 
             <div class="col-md-6">
-              <label>Email</label>
+              <label class="form-label fw-medium">Email</label>
               <input formControlName="email" type="email" class="form-control" />
             </div>
 
             <div class="col-md-6">
-              <label>Telefone</label>
+              <label class="form-label fw-medium">Telefone</label>
               <input formControlName="telefone" type="text" class="form-control" />
             </div>
 
             <div class="col-md-6">
-              <label>Cargo</label>
+              <label class="form-label fw-medium">Cargo</label>
               <input formControlName="cargo" type="text" class="form-control" />
             </div>
 
             <div class="col-md-6">
-              <label>Especialidade</label>
+              <label class="form-label fw-medium">Especialidade/Área</label>
               <input formControlName="especialidade" type="text" class="form-control" />
             </div>
 
             <div class="col-md-6">
-              <label>Salário (R$)</label>
+              <label class="form-label fw-medium">Salário (R$)</label>
               <input formControlName="salario" type="number" class="form-control" />
             </div>
 
-            <div class="col-12 d-flex gap-2 mt-2">
-              <button type="submit" class="btn btn-success">Salvar</button>
-              <button type="button" class="btn btn-secondary" (click)="limpar()">Cancelar</button>
+            <div class="col-12 d-flex gap-3 pt-4 border-top">
+              <button type="submit" class="btn btn-success px-4 d-flex align-items-center">
+                <i class="bi bi-check me-2 fs-5"></i>
+                Confirmar
+              </button>
+              <button type="button" class="btn btn-secondary px-4" (click)="limpar()">
+                Cancelar
+              </button>
 
               <button
                 *ngIf="isEditando"
                 type="button"
-                class="btn btn-danger ms-auto"
+                class="btn btn-outline-danger ms-auto d-flex align-items-center"
                 (click)="excluir(formulario.value)"
               >
-                Excluir
+                <i class="bi bi-trash3 me-2"></i>
+                Excluir Registro
               </button>
             </div>
           </div>
         </form>
       </div>
 
-      <div class="table-responsive">
-        <table class="table table-hover table-striped align-middle shadow-sm rounded">
-          <thead class="table-light">
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Telefone</th>
-              <th>Cargo</th>
-              <th>Especialidade</th>
-              <th>Salário (R$)</th>
-              <th>Editar</th>
-            </tr>
-          </thead>
+      <div class="card p-0 shadow-lg border-0">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover align-middle mb-0">
+            
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="text-secondary ps-4"># ID</th>
+                <th scope="col" class="text-secondary">Nome</th>
+                <th scope="col" class="text-secondary">Email</th>
+                <th scope="col" class="text-secondary">Telefone</th>
+                <th scope="col" class="text-secondary">Cargo</th>
+                <th scope="col" class="text-secondary">Especialidade</th>
+                <th scope="col" class="text-secondary text-end pe-4">Salário (R$)</th>
+                <th scope="col" class="text-secondary">Ação</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr *ngFor="let r of listaFiltrada; trackBy: trackById">
-              <th>{{ r.id }}</th>
-              <td>{{ r.nome }}</td>
-              <td>{{ r.email }}</td>
-              <td>{{ r.telefone }}</td>
-              <td>{{ r.cargo }}</td>
-              <td>{{ r.especialidade }}</td>
-              <td>{{ r.salario }}</td>
+            <tbody>
+              <tr *ngFor="let r of listaFiltrada; trackBy: trackById">
+                <th scope="row" class="text-primary ps-4">{{ r.id }}</th>
+                <td><span class="fw-semibold">{{ r.nome }}</span></td>
+                <td>{{ r.email }}</td>
+                <td>{{ r.telefone }}</td>
+                <td>{{ r.cargo }}</td>
+                <td>{{ r.especialidade }}</td>
+                <td class="text-end fw-bold text-success pe-4">{{ r.salario | currency: 'BRL' }}</td>
 
-              <td>
-                <button
-                  class="btn btn-sm btn-outline-primary"
-                  (click)="iniciarEdicao(r)"
-                >
-                  Editar
-                </button>
-              </td>
-            </tr>
-          </tbody>
+                <td>
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    title="Editar Registro"
+                    (click)="iniciarEdicao(r)"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
 
-        </table>
+          </table>
+        </div>
+        <div class="card-footer bg-white text-muted small text-end border-top-0">
+            Total de Registros: {{ listaFiltrada.length }}
+        </div>
       </div>
 
     </div>
