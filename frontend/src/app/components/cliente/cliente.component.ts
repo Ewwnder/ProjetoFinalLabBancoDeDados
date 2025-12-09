@@ -25,12 +25,10 @@ export class ClienteComponent implements OnInit {
   constructor(private servicoCliente: ClienteService, private formBuilder: FormBuilder) {
 
     this.formularioCliente = this.formBuilder.group({
-      id: [''],
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telefone: [''],
       sexo: [''], 
-      data_cadastro: [''],
       cpf: [''],
       data_nascimento: [''],
       informacoes: [''],

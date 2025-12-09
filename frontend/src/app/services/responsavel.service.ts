@@ -39,7 +39,4 @@ export class ResponsavelService {
     return this.http.delete<void>(`${this.apiUrl}/${responsavel.id}`);
   }
 
-  buscarPeloEmail(email: string): Observable<Responsavel>{
-    return this.http.get<Responsavel>(`${this.apiUrl}/${email}`)
-  }
 }

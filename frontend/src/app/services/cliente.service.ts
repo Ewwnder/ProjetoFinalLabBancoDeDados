@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cliente } from '../../entity/cliente';
+import { ClienteRequest } from '../../entity/clienteRequest';
 
 
 @Injectable({
@@ -27,8 +28,8 @@ export class ClienteService {
     return this.http.get<Cliente[]>(this.apiUrl, { params: parametros });
   }
 
-  salvar(cliente: Cliente): Observable<Cliente> {
-    return this.http.post<Cliente>(this.apiUrl, cliente);
+  salvar(cliente: ClienteRequest): Observable<void> {
+    return this.http.post<void>(this.apiUrl, cliente);
   }
 
   atualizar(cliente: Cliente): Observable<Cliente> {
@@ -37,5 +38,9 @@ export class ClienteService {
 
   excluir(cliente: Cliente): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${cliente.id}`);
+  }
+
+   buscarPeloEmail(email: string): Observable<Cliente>{
+    return this.http.get<Cliente>(`${this.apiUrl}/${email}`)
   }
 }

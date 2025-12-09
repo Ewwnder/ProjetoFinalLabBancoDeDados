@@ -1,89 +1,81 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, FormBuilder, FormsModule} from '@angular/forms';
 import { OrdemServicoRequest } from '../../../entity/ordemServicoRequest';
 import { OrdemServicoService } from '../../services/ordem-servico.service';
-import { Responsavel } from '../../../entity/responsavel';
-import { retry } from 'rxjs';
-import { ResponsavelService } from '../../services/responsavel.service';
 import { Servico } from '../../../entity/servico';
 import { ServicosService } from '../../services/servicos.service';
-
+import { Cliente } from '../../../entity/cliente';
+import { ClienteService } from '../../services/cliente.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
   selector: 'app-ordem-servico',
-  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './ordem-servico.html',
-  styleUrl: './ordem-servico.css',
+  styleUrls: ['./ordem-servico.css'],
+  imports: [FormsModule,
+    CommonModule
+  ]
 })
-export class OrdemServico implements OnInit{
+export class OrdemServico implements OnInit {
 
-  formsOrdemServico!: FormGroup;
-  ordemServicoRequest?: OrdemServicoRequest;
-  servicoSelecionado?: Servico | null = null;
-  responsavel: Responsavel | null = null;
+  email: string = '';
+  data: string = '';
+  hora: string = '';
+  cliente: Cliente | null = null;
+  servicoSelecionado: Servico | null = null;
   servicos: Servico[] = [];
   servicosSelecionados: Servico[] = [];
   valorTotalExibir: number = 0;
 
-   constructor(
-    private gerenciarOrdemServico: OrdemServicoService, 
-    private gerenciarResponsavelServico: ResponsavelService, 
-    private formBuilder: FormBuilder,
-    private gerenciarServico: ServicosService){}
+  constructor(
+    private gerenciarOrdemServico: OrdemServicoService,
+    private gerenciarClienteServico: ClienteService,
+    private gerenciarServico: ServicosService
+  ) {}
 
   ngOnInit(): void {
-    this.formsOrdemServico = this.formBuilder.group({
-      data: [''],
-      hora: [''],
-      servicosIds: [[]]
-    })
-
-   this.gerenciarServico.getAll().subscribe({
-      next: (res: any) => this.servicos = res
-   });
-  }
-  
-  pesquisarResponsavel(email: string){
-      this.gerenciarResponsavelServico.buscarPeloEmail(email).subscribe({
-        next: (res: Responsavel) => this.responsavel = res
-      });
+    this.gerenciarServico.getAll().subscribe(res => this.servicos = res);
   }
 
-  adicionarServico(){
-    if(!this.servicoSelecionado) return;
-
-    this.servicosSelecionados.push(this.servicoSelecionado);
-
-    this.formsOrdemServico.patchValue({
-      servicosIds: this.servicosSelecionados
+  pesquisarCliente() {
+    if (!this.email) return;
+    this.gerenciarClienteServico.buscarPeloEmail(this.email).subscribe(res => {
+      this.cliente = res;
     });
-    this.valorTotalExibir = this.valorTotalExibir + this.servicoSelecionado.valor;
-  
+  }
+
+  adicionarServico() {
+    if (!this.servicoSelecionado) return;
+    this.servicosSelecionados.push(this.servicoSelecionado);
+    this.valorTotalExibir += this.servicoSelecionado.valor;
     this.servicoSelecionado = null;
   }
 
-  realizarAgendamento(){
-    
-    const data = this.formsOrdemServico.get('data')?.value;
-    const hora = this.formsOrdemServico.get('horario')?.value;
-    const dataHora = new Date(`${data}T${hora}:00`); //formato do localdate time 
-    const request: OrdemServicoRequest = {
-      dataHora: dataHora,
-      responsavelId: this.responsavel?.id ?? '',
-      servicosId: this.servicosSelecionados.map(s => s.id)
-    }
-
-    this.gerenciarOrdemServico.salvar(request).subscribe({
-      next: (res: void) => {
-        alert("Cadastrado com sucesso!")
-      }
-    });
+  removerServico(index: number) {
+    this.servicosSelecionados.splice(index, 1);
+    this.valorTotalExibir = this.servicosSelecionados.reduce((sum, s) => sum + s.valor, 0);
   }
 
+  realizarAgendamento() {
+    if (!this.cliente) return alert("Selecione um cliente!");
+    const dataHora = new Date(`${this.data}T${this.hora}:00`);
+    const request: OrdemServicoRequest = {
+      dataHora,
+      responsavelId: this.cliente.id,
+      servicosId: this.servicosSelecionados.map(s => s.id)
+    };
+    this.gerenciarOrdemServico.salvar(request).subscribe(() => alert("Agendamento realizado!"));
+  }
 
-  } 
+  limparFormulario() {
+    this.email = '';
+    this.data = '';
+    this.hora = '';
+    this.cliente = null;
+    this.servicoSelecionado = null;
+    this.servicosSelecionados = [];
+    this.valorTotalExibir = 0;
+  }
 
-  
-
-
+}
