@@ -8,7 +8,6 @@ public record ClienteRequestDTO(
     String email,
     String telefone,
     String sexo,
-    LocalDate data_cadastro,
     String cpf,
     LocalDate data_nascimento,
     String informacoes
