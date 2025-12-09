@@ -16,20 +16,12 @@ public class ClienteMapper {
         cliente.setCpf(request.cpf());
         cliente.setEmail(request.email());
         cliente.setTelefone(request.telefone());
-        cliente.setDataNascimento(request.dataNascimento());
+        cliente.setSexo(request.sexo());
+        cliente.setDataNascimento(request.data_nascimento());
         cliente.setDataCadastro(LocalDate.now());
         cliente.setInformacoesAdicionais(request.informacoes());
         return cliente;
     }
-
-     String nome,
-    String email,
-    String telefone,
-    String cpf,
-    LocalDate cadastro,
-    LocalDate dataNascimento,
-    String informacoes
-
 
     public ClienteResponseDTO toResponse(Cliente cliente){
         return new ClienteResponseDTO(
@@ -37,6 +29,7 @@ public class ClienteMapper {
         cliente.getNome(), 
         cliente.getEmail(), 
         cliente.getTelefone(), 
+        cliente.getSexo(),
         cliente.getCpf(), 
         cliente.getDataCadastro(), 
         cliente.getDataNascimento(), 
