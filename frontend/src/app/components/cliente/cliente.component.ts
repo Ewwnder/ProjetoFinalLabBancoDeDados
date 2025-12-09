@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cliente } from '../../../entity/cliente'; 
 import { ClienteService } from '../../services/cliente.service'; 
+import { ClienteRequest } from '../../../entity/clienteRequest';
 
 @Component({
   selector: 'app-cliente',
@@ -25,6 +26,7 @@ export class ClienteComponent implements OnInit {
   constructor(private servicoCliente: ClienteService, private formBuilder: FormBuilder) {
 
     this.formularioCliente = this.formBuilder.group({
+      id: [''],
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telefone: [''],
@@ -95,13 +97,18 @@ export class ClienteComponent implements OnInit {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
-    const clienteParaSalvar: Cliente = {
-        ...this.formularioCliente.value,
-        data_cadastro: new Date().toISOString()
-    };
+    const clienteRequest: ClienteRequest = {
+        nome: this.formularioCliente.value.nome,
+        email: this.formularioCliente.value.email,
+        telefone: this.formularioCliente.value.telefone,
+        sexo: this.formularioCliente.value.sexo,
+        cpf: this.formularioCliente.value.cpf,
+        data_nascimento: this.formularioCliente.value.data_nascimento,
+        informacoes: this.formularioCliente.value.informacoes
+    }
     
     if (this.isAdicionando) {
-        this.servicoCliente.salvar(clienteParaSalvar).subscribe({
+        this.servicoCliente.salvar(clienteRequest).subscribe({
           next: () => {
             alert('Cliente cadastrado com sucesso!');
             this.carregarClientes();
@@ -109,6 +116,7 @@ export class ClienteComponent implements OnInit {
           },
           error: (err) => console.error('Erro ao salvar:', err)
         });
+        /*
     } else if (this.isEditando) {
         this.servicoCliente.atualizar(clienteParaSalvar).subscribe({
             next: () => {
@@ -117,7 +125,7 @@ export class ClienteComponent implements OnInit {
                 this.limpar();
             },
             error: (err) => console.error('Erro ao atualizar:', err)
-        });
+        });*/
     }
   }
   atualizar() {
