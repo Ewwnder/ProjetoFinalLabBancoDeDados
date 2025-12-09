@@ -1,100 +1,159 @@
-<h1 class="text-center">Realize seu Agendamento</h1>
+<div class="header-title">
+  <div class="container">
+    <h1><i class="fas fa-calendar-alt"></i> Realize seu Agendamento</h1>
+    <p class="lead mb-0">Agende serviços de forma rápida e prática</p>
+  </div>
+</div>
 
-<div class="container mt-4">
-    <form>
-        <h4>Informações do Cliente</h4>
-        <div class="row mt-4">
-            <div class="col-md-8">
-                <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail4">
-            </div>
+<div class="container">
+  <form>
 
-            <div class="col-md-4 d-flex align-items-end">
-                <button class="btn btn-primary w-100">Pesquisar</button>
-            </div>
+    <div class="form-container">
+      <h3 class="section-title"><i class="fas fa-user-circle me-2"></i>Informações do Responsável</h3>
+
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <label for="inputEmail" class="form-label">Email</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input #inputEmail type="email" class="form-control" id="inputEmail" placeholder="exemplo@email.com">
+          </div>
+          <div class="form-text">Digite o email para buscar as informações do cliente</div>
         </div>
 
-        <!-- LINHA 2: Nome -->
-        <div class="row mt-4 align-items-center">
-            <div class="col-md-6 d-flex flex-column">
-                <label for="inputNome" class="form-label mb-1">Nome</label>
-                <input type="text" class="form-control" id="inputNome" placeholder="Digite o nome do cliente">
-            </div>
-
-            <div class="col-md-6 d-flex flex-column mb-1">
-                <label for="inputAddress2">Telefone</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-            </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="button" class="btn btn-primary w-100 btn-pesquisar" (click)="pesquisarResponsavel(inputEmail.value)">
+            <i class="fas fa-search me-2"></i>Pesquisar
+          </button>
         </div>
-        <hr>
+      </div>
 
-        <h4>Informações do Atendimento</h4>
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <label for="inputNome" class="form-label">Data do Atendimento</label>
-                <input type="date" class="form-control" id="inputNome">
-            </div>
-
-            <div class="col-md-6">
-                <label for="inputNome" class="form-label">Horário do Atendimento</label>
-                <input type="time" class="form-control" id="inputNome">
-            </div>
-        </div>
-        <hr>
-        <div class="container d-flex justify-content-between align-items-center">       
-            <h4>Listagem de Serviços Agendados</h4>
-            <button class="me-2" type="submit">Adicionar Serviço</button>
+      <div class="row mt-4 align-items-center">
+        <div class="col-md-6">
+          <label for="inputNome" class="form-label">Nome</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input type="text" class="form-control" id="inputNome" readonly placeholder="Nome do cliente" [value]="responsavel?.nome">
+          </div>
         </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>mdo</td>
-                </tr>
-
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>fat</td>
-                </tr>
-
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>twitter</td>
-                </tr>
-            </tbody>
-
-        </table>
-        <div class="row mt-4 align-items-center">
-
-            <!-- Label + Input -->
-            <div class="col-md-4 d-flex align-items-center">
-                <label for="inputNome" class="me-2 mb-0">Valor total:</label>
-                <input type="number" class="form-control" id="inputNome" readonly>
-            </div>
-
-            <!-- Botões -->
-            <div class="col-md-8 d-flex justify-content-start gap-2">
-                <button class="btn btn-primary">Realizar Agendamento</button>
-                <button class="btn btn-secondary">Limpar Formulário</button>
-            </div>
-
+        <div class="col-md-6">
+          <label for="inputTelefone" class="form-label">Telefone</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+            <input type="text" class="form-control" id="inputTelefone" readonly placeholder="(00) 00000-0000" [value]="responsavel?.telefone">
+          </div>
         </div>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <h3 class="section-title"><i class="fas fa-calendar-check me-2"></i>Informações do Atendimento</h3>
+
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <label for="inputData" class="form-label">Data do Atendimento</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+            <input type="date" class="form-control" formControlName="data">
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="inputHorario" class="form-label">Horário do Atendimento</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+            <input type="time" class="form-control" formControlName="horario">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="form-container">
+      <h3 class="section-title"><i class="fas fa-tools me-2"></i>Selecionar Serviço</h3>
+
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <label for="selectServico" class="form-label">Serviço</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-wrench"></i></span>
+
+            <select id="selectServico" class="form-select" [(ngModel)]="servicoSelecionado" name="servicoSelecionado">
+              <option value="" disabled selected>Selecione um serviço</option>
+              @for (s of servicos; track s.id) {
+                <option [value]="s">
+                    {{ s.nome }} — {{ s.valor }}
+                </option>
+                }
+            </select>
+          </div>
+          <div class="form-text">Escolha um serviço para adicionar ao atendimento.</div>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="button" class="btn btn-success w-100" (click)="adicionarServico()">
+            <i class="fas fa-plus-circle me-2"></i>
+            Adicionar Serviço
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="section-title mb-0"><i class="fas fa-list-check me-2"></i>Listagem de Serviços Agendados</h3>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover table-striped">
+          <thead class="table-primary">
+            <tr>
+              <th scope="col" class="text-center">#</th>
+              <th scope="col">Serviço</th>
+              <th scope="col">Profissional</th>
+              <th scope="col" class="text-end">Valor</th>
+              <th scope="col" class="text-center">Ações</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (servico of servicosSelecionados; track servico.id) {
+            <tr>
+              <th scope="row" class="text-center">{{$index + 1}}</th>
+              <td>{{servico.nome}}</td>
+              <td>{{servico.responsavel}}</td>
+              <td class="text-end">{{servico.valor}}</td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+             }
+          </tbody>  
+         
+
         
-    </form>
+        </table>
+      </div>
+
+      <div class="row mt-4 align-items-center">
+        <div class="col-md-8 d-flex justify-content-start gap-2">
+          <button class="btn btn-primary btn-lg btn-agendar" (click)="realizarAgendamento()">
+            <i class="fas fa-calendar-check me-2"></i>Realizar Agendamento
+          </button>
+          <button class="btn btn-outline-secondary btn-lg" type="reset">
+            <i class="fas fa-broom me-2"></i>Limpar Formulário
+          </button>
+        </div>
+
+        <div class="col-md-4 text-end">
+          <div class="total-container">
+            <h5 class="mb-1">Valor Total</h5>
+            <div class="total-value">{{valorTotalExibir}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  
 </div>
