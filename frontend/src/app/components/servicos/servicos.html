@@ -48,7 +48,7 @@
       </form>
 
       <div *ngIf="isAdding || isEditing" class="card shadow-sm p-3 mb-4 border">
-        <h5>{{ isAdding ? 'Adicionar Serviço' : 'Editar Serviço' }}</h5>
+        <h5>{{ isAdding ? 'Acrescentar Serviço' : 'Editar Serviço' }}</h5>
         <form [formGroup]="formGroupServico" (ngSubmit)="isAdding ? save() : update()">
           <div class="row g-3">
             <div class="col-md-4">
@@ -95,11 +95,9 @@
             </div>
 
             <div class="col-12 d-flex gap-2 mt-2">
-              <button type="submit" class="btn btn-success">💾 Salvar</button>
+              <button type="submit" class="btn btn-success">Salvar</button>
               <button type="button" class="btn btn-secondary" (click)="clear()">Cancelar</button>
-              <button *ngIf="isEditing" type="button" class="btn btn-danger ms-auto" (click)="delete(formGroupServico.value)">
-                🗑️ Excluir
-              </button>
+              <button *ngIf="isEditing" type="button" class="btn btn-danger ms-auto" (click)="delete(formGroupServico.value)">Excluir</button>
             </div>
           </div>
         </form>
@@ -130,7 +128,7 @@
               <td>{{ c.custo }}</td>
               <td>{{ c.responsavel }}</td>
               <td>
-                <button class="btn btn-sm btn-outline-primary" (click)="startEditing(c)">✏️ Editar</button>
+                <button class="btn btn-sm btn-outline-primary" (click)="startEditing(c)">Editar</button>
               </td>
             </tr>
           </tbody>
