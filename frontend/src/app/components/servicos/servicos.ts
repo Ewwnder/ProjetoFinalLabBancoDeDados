@@ -6,7 +6,7 @@ import { Servico } from '../../../entity/servico';
 
 @Component({
   selector: 'app-servicos',
-  standalone: true,
+  standalone: true, 
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './servicos.html',
   styleUrls: ['./servicos.css'],
