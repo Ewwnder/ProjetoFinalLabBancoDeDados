@@ -1,1 +1,126 @@
-<p>responsavel works!</p>
+<div class="container py-4">
+  <div class="row">
+    <div class="col-12 col-lg-10 m-auto">
+
+      <h1 class="text-center mb-4">Responsáveis Cadastrados</h1>
+
+      <div class="text-end mb-3">
+        <button class="btn btn-success" (click)="iniciarAdicao()">Adicionar Responsável</button>
+      </div>
+
+      <form class="card shadow-sm p-3 mb-4 border" [formGroup]="filtro">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-6 col-lg-4">
+            <label class="form-label">Filtrar (Nome / Email)</label>
+            <input
+              formControlName="busca"
+              type="text"
+              class="form-control"
+              placeholder="Buscar..."
+            />
+          </div>
+
+          <div class="col-12 text-end mt-2">
+            <button type="button" class="btn btn-outline-primary" (click)="alternarOrdem()">
+              <i class="bi bi-sort-alpha-down"></i>
+              Ordenar {{ filtro.get('ordenarAZ')?.value ? '(A-Z)' : '(Normal)' }}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div *ngIf="isAdicionando || isEditando" class="card shadow-sm p-3 mb-4 border">
+        <h5>{{ isAdicionando ? 'Adicionar Responsável' : 'Editar Responsável' }}</h5>
+
+        <form [formGroup]="formulario" (ngSubmit)="isAdicionando ? salvar() : atualizar()">
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              <label>Nome</label>
+              <input formControlName="nome" type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Email</label>
+              <input formControlName="email" type="email" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Telefone</label>
+              <input formControlName="telefone" type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Cargo</label>
+              <input formControlName="cargo" type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Especialidade</label>
+              <input formControlName="especialidade" type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+              <label>Salário (R$)</label>
+              <input formControlName="salario" type="number" class="form-control" />
+            </div>
+
+            <div class="col-12 d-flex gap-2 mt-2">
+              <button type="submit" class="btn btn-success">Salvar</button>
+              <button type="button" class="btn btn-secondary" (click)="limpar()">Cancelar</button>
+
+              <button
+                *ngIf="isEditando"
+                type="button"
+                class="btn btn-danger ms-auto"
+                (click)="excluir(formulario.value)"
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle shadow-sm rounded">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Telefone</th>
+              <th>Cargo</th>
+              <th>Especialidade</th>
+              <th>Salário (R$)</th>
+              <th>Editar</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of listaFiltrada; trackBy: trackById">
+              <th>{{ r.id }}</th>
+              <td>{{ r.nome }}</td>
+              <td>{{ r.email }}</td>
+              <td>{{ r.telefone }}</td>
+              <td>{{ r.cargo }}</td>
+              <td>{{ r.especialidade }}</td>
+              <td>{{ r.salario }}</td>
+
+              <td>
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="iniciarEdicao(r)"
+                >
+                  Editar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
