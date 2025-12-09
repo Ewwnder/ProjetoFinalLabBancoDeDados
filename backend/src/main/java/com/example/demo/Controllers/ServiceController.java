@@ -1,4 +1,4 @@
-package com.example.demo.controllers;
+package com.example.demo.Controllers;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entities.Servico;
-import com.example.demo.services.ServicoService;
+import com.example.demo.Entities.Servico;
+import com.example.demo.Services.ServicoService;
 
 @RestController
 @RequestMapping("/servicos")

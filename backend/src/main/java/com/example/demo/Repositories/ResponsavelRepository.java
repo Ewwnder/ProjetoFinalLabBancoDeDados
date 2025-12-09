@@ -1,12 +1,11 @@
 package com.example.demo.Repositories;
 
-
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.Entities.Servico;
+import com.example.demo.Entities.Responsavel;
 
 @Repository
-public interface ServicoRepository extends MongoRepository<Servico, String> {
-    
+public interface ResponsavelRepository  extends MongoRepository<Responsavel, String>{
+
 }
