@@ -1,19 +1,16 @@
-package com.example.demo.services;
+package com.example.demo.Services;
 
 import java.util.List;
-import java.util.UUID;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Sort;
-
-import com.example.demo.entities.Servico;
-import com.example.demo.repositories.ServicoRepository;
-
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.Entities.Servico;
+import com.example.demo.Repositories.ServicoRepository;
 
 @Service
 public class ServicoService {

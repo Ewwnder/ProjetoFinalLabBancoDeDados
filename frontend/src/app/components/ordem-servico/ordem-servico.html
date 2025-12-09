@@ -1,100 +1,117 @@
-<h1 class="text-center">Realize seu Agendamento</h1>
+<div class="header-title">
+  <div class="container">
+    <h1><i class="fas fa-calendar-alt"></i> Realize seu Agendamento</h1>
+    <p class="lead mb-0">Agende serviços de forma rápida e prática</p>
+  </div>
+</div>
 
-<div class="container mt-4">
-    <form>
-        <h4>Informações do Cliente</h4>
-        <div class="row mt-4">
-            <div class="col-md-8">
-                <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail4">
-            </div>
+<div class="container">
+  <form>
 
-            <div class="col-md-4 d-flex align-items-end">
-                <button class="btn btn-primary w-100">Pesquisar</button>
-            </div>
+    <!-- Informações do Responsável -->
+    <div class="form-container">
+      <h3 class="section-title"><i class="fas fa-user-circle me-2"></i>Informações do Responsável</h3>
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <label class="form-label">Email</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input type="email" class="form-control" placeholder="exemplo@email.com" [(ngModel)]="email" name="email">
+          </div>
+          <div class="form-text">Digite o email para buscar as informações do cliente</div>
         </div>
-
-        <!-- LINHA 2: Nome -->
-        <div class="row mt-4 align-items-center">
-            <div class="col-md-6 d-flex flex-column">
-                <label for="inputNome" class="form-label mb-1">Nome</label>
-                <input type="text" class="form-control" id="inputNome" placeholder="Digite o nome do cliente">
-            </div>
-
-            <div class="col-md-6 d-flex flex-column mb-1">
-                <label for="inputAddress2">Telefone</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-            </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="button" class="btn btn-primary w-100" (click)="pesquisarCliente()">
+            <i class="fas fa-search me-2"></i>Pesquisar
+          </button>
         </div>
-        <hr>
+      </div>
 
-        <h4>Informações do Atendimento</h4>
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <label for="inputNome" class="form-label">Data do Atendimento</label>
-                <input type="date" class="form-control" id="inputNome">
-            </div>
-
-            <div class="col-md-6">
-                <label for="inputNome" class="form-label">Horário do Atendimento</label>
-                <input type="time" class="form-control" id="inputNome">
-            </div>
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <label class="form-label">Nome</label>
+          <input type="text" class="form-control" readonly [value]="cliente?.nome">
         </div>
-        <hr>
-        <div class="container d-flex justify-content-between align-items-center">       
-            <h4>Listagem de Serviços Agendados</h4>
-            <button class="me-2" type="submit">Adicionar Serviço</button>
+        <div class="col-md-6">
+          <label class="form-label">Telefone</label>
+          <input type="text" class="form-control" readonly [value]="cliente?.telefone">
         </div>
+      </div>
+    </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>mdo</td>
-                </tr>
-
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>fat</td>
-                </tr>
-
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>twitter</td>
-                </tr>
-            </tbody>
-
-        </table>
-        <div class="row mt-4 align-items-center">
-
-            <!-- Label + Input -->
-            <div class="col-md-4 d-flex align-items-center">
-                <label for="inputNome" class="me-2 mb-0">Valor total:</label>
-                <input type="number" class="form-control" id="inputNome" readonly>
-            </div>
-
-            <!-- Botões -->
-            <div class="col-md-8 d-flex justify-content-start gap-2">
-                <button class="btn btn-primary">Realizar Agendamento</button>
-                <button class="btn btn-secondary">Limpar Formulário</button>
-            </div>
-
+    <!-- Informações do Atendimento -->
+    <div class="form-container">
+      <h3 class="section-title"><i class="fas fa-calendar-check me-2"></i>Informações do Atendimento</h3>
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <label class="form-label">Data do Atendimento</label>
+          <input type="date" class="form-control" [(ngModel)]="data" name="data">
         </div>
-        
-    </form>
+        <div class="col-md-6">
+          <label class="form-label">Horário do Atendimento</label>
+          <input type="time" class="form-control" [(ngModel)]="hora" name="hora">
+        </div>
+      </div>
+    </div>
+
+    <!-- Seleção de Serviço -->
+    <div class="form-container">
+      <h3 class="section-title"><i class="fas fa-tools me-2"></i>Selecionar Serviço</h3>
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <label class="form-label">Serviço</label>
+          <select class="form-select" [(ngModel)]="servicoSelecionado" name="servicoSelecionado">
+            <option value="" disabled selected>Selecione um serviço</option>
+            <option *ngFor="let s of servicos" [ngValue]="s">
+              {{ s.nome }} — {{ s.valor }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="button" class="btn btn-success w-100" (click)="adicionarServico()">
+            <i class="fas fa-plus-circle me-2"></i>Adicionar Serviço
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Listagem de Serviços -->
+    <div class="form-container mt-4">
+      <h3 class="section-title"><i class="fas fa-list-check me-2"></i>Listagem de Serviços Agendados</h3>
+      <table class="table table-hover table-striped mt-2">
+        <thead class="table-primary">
+          <tr>
+            <th>#</th>
+            <th>Serviço</th>
+            <th>Profissional</th>
+            <th class="text-end">Valor</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of servicosSelecionados; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>{{ s.nome }}</td>
+            <td>{{ s.responsavel }}</td>
+            <td class="text-end">{{ s.valor }}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removerServico(i)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+          <button type="button" class="btn btn-primary" (click)="realizarAgendamento()">Realizar Agendamento</button>
+          <button type="reset" class="btn btn-outline-secondary" (click)="limparFormulario()">Limpar</button>
+        </div>
+        <div>
+          <strong>Valor Total: {{ valorTotalExibir }}</strong>
+        </div>
+      </div>
+    </div>
+
+  </form>
 </div>

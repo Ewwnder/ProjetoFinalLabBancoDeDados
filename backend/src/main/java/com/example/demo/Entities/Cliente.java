@@ -1,5 +1,7 @@
 package com.example.demo.Entities;
 
+import java.time.LocalDate;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.persistence.Id;
@@ -7,28 +9,30 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@Document(collection = "servicos")
+@Document(collection = "clientes")
 @Getter
 @Setter
 @EqualsAndHashCode (onlyExplicitlyIncluded = true)
-public class Servico {
+public class Cliente {
     
     @Id
     @EqualsAndHashCode.Include
     private String id;
 
+    private String cpf;
+
     private String nome;
 
-    private String categoria;
+    private String email;
 
+    private String telefone;
 
-    private String tipo;
-    private Double valor;
+    private String sexo;
 
-    private Double custo;
+    private LocalDate dataCadastro;
 
-    
-    private String responsavel;
+    private LocalDate dataNascimento;
 
+    private String informacoesAdicionais;
 
 }

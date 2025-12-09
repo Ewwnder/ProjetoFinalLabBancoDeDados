@@ -1,9 +1,9 @@
-package com.example.demo.repositories;
+package com.example.demo.Repositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.entities.OrdemServico;
+import com.example.demo.Entities.OrdemServico;
 
 @Repository
 public interface OrdemServicoRepository extends MongoRepository<OrdemServico, String> {

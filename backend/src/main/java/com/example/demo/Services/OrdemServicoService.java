@@ -1,10 +1,15 @@
-package com.example.demo.services;
+package com.example.demo.Services;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entities.OrdemServico;
-import com.example.demo.repositories.OrdemServicoRepository;
+import com.example.demo.Entities.OrdemServico;
+import com.example.demo.Repositories.OrdemServicoRepository;
+import com.example.demo.dto.OrdemServicoRequest;
+import com.example.demo.dto.OrdemServicoResponse;
+import com.example.demo.mapper.OrdemServicoMapper;
 
 @Service
 public class OrdemServicoService {
@@ -12,8 +17,22 @@ public class OrdemServicoService {
     @Autowired
     private OrdemServicoRepository ordemServicoRepository;
 
-    public OrdemServico criarOrdemServico(OrdemServico ordemServico){
-        return ordemServicoRepository.save(ordemServico);
+    @Autowired
+    private OrdemServicoMapper ordemServicoMapper;
+
+    public void criarOrdemServico(OrdemServicoRequest ordemServicoRequest){
+        OrdemServico ordemServico = ordemServicoMapper.toEntity(ordemServicoRequest);
+        ordemServicoRepository.save(ordemServico);
+    }
+
+    public List<OrdemServicoResponse> listarOrdensServicos(){
+        return ordemServicoRepository.findAll().stream()
+        .map(ordem -> ordemServicoMapper.toResponse(ordem))
+        .toList();
+    }
+
+    public void deletarOrdemServico(String id){
+        ordemServicoRepository.deleteById(id);
     }
 
 }

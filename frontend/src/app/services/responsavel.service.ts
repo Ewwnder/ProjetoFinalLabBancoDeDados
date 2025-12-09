@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Responsavel } from '../../entity/responsavel';
+import { ResponsavelComponent } from '../components/responsavel/responsavel.component';
 
 @Injectable({
   providedIn: 'root'
@@ -37,4 +38,5 @@ export class ResponsavelService {
   excluir(responsavel: Responsavel): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${responsavel.id}`);
   }
+
 }
