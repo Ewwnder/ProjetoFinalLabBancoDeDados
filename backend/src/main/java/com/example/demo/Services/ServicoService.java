@@ -54,4 +54,8 @@ public class ServicoService {
 
         return mongoTemplate.find(query, Servico.class);
     }
+
+    public Servico buscarPeloId(String id) {
+        return repositorioServico.findById(id).orElse(null);
+    }
 }

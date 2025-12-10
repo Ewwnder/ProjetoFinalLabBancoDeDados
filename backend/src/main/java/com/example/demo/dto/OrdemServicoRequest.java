@@ -6,8 +6,8 @@ import java.util.List;
 public record OrdemServicoRequest (
 
     LocalDateTime dataHora,
-    String responsavelId,
+    String clienteId,
     List<String> servicosId
 ){
- 
+    
 }

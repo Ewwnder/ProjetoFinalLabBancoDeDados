@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record OrdemServicoResponse(
+    String id,
     LocalDateTime dataHora,
     String nomeCliente,
-    List<String> servicosId
+    List<String> servicosId,
+    double valorTotal
 
 ) {
    

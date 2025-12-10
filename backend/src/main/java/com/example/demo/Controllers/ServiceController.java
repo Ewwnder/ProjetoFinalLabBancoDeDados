@@ -37,6 +37,11 @@ public class ServiceController {
         return ResponseEntity.ok(servicoService.filtroContatos(tipo, busca, categoria, ordenarAZ));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Servico> buscarPorId(@PathVariable String id){
+        return ResponseEntity.ok(servicoService.buscarPeloId(id));
+    }
+
     @PostMapping
     public ResponseEntity<Servico> inserir(@RequestBody Servico servico){
         return ResponseEntity.created(null).body(servicoService.save(servico));

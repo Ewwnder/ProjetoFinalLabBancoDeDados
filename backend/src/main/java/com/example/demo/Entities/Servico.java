@@ -19,7 +19,7 @@ public class Servico {
 
     private String nome;
 
-    private String categoria;
+    private String categoria;   
 
 
     private String tipo;
