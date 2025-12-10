@@ -1,0 +1,68 @@
+<main class="pt-5 mt-5 pb-5 flex-grow-1"> 
+  <div class="container px-lg-5 py-5">
+    
+    <header class="text-center mb-5">
+      <h1 class="display-5 fw-bold text-dark">
+        Bem-vindo(a) ao Sistema de Gestão do Beleza Pura
+      </h1>
+      <p class="lead text-muted">Selecione um módulo para prosseguir.</p>
+    </header>
+
+    <div class="row g-4 justify-content-center">
+      
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card shadow-lg h-100 text-center border-0 border-top border-5 border-primary">
+          <div class="card-body d-flex flex-column align-items-center p-4">
+            <i class="bi bi-people-fill text-primary display-4 mb-3"></i>
+            <h5 class="card-title fw-bold">Clientes</h5>
+            <p class="card-text small text-muted mb-4">Gerencie a base de clientes e suas informações.</p>
+            <a routerLink="/cliente" class="btn btn-primary mt-auto w-100">
+              Acessar Módulo
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card shadow-lg h-100 text-center border-0 border-top border-5 border-info">
+          <div class="card-body d-flex flex-column align-items-center p-4">
+            <i class="bi bi-person-lines-fill text-info display-4 mb-3"></i>
+            <h5 class="card-title fw-bold">Responsáveis</h5>
+            <p class="card-text small text-muted mb-4">Gerencie a sua equipe.</p>
+            <a routerLink="/responsavel" class="btn btn-info text-white mt-auto w-100">
+              Acessar Módulo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card shadow-lg h-100 text-center border-0 border-top border-5 border-warning">
+          <div class="card-body d-flex flex-column align-items-center p-4">
+            <i class="bi bi-journal-text text-warning display-4 mb-3"></i>
+            <h5 class="card-title fw-bold">Ordens de Serviço</h5>
+            <p class="card-text small text-muted mb-4">Crie, acompanhe e finalize as tarefas.</p>
+            <a routerLink="/ordem-servico" class="btn btn-warning mt-auto w-100">
+              Acessar Módulo
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card shadow-lg h-100 text-center border-0 border-top border-5 border-success">
+          <div class="card-body d-flex flex-column align-items-center p-4">
+            <i class="bi bi-tools text-success display-4 mb-3"></i>
+            <h5 class="card-title fw-bold">Serviços</h5>
+            <p class="card-text small text-muted mb-4">Cadastro de serviços oferecidos</p>
+            <a routerLink="/servicos" class="btn btn-success mt-auto w-100">
+              Acessar Módulo
+            </a>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+</main>
