@@ -20,7 +20,6 @@ export class ClienteComponent implements OnInit {
   isEditando = false;
   isAdicionando = false;
 
-  // Padrão de Filtro Mantido
   filtro: FormGroup; 
 
   constructor(private servicoCliente: ClienteService, private formBuilder: FormBuilder) {
