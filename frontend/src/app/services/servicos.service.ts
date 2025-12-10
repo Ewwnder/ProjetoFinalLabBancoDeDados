@@ -47,4 +47,8 @@ export class ServicosService {
   delete(servico:Servico): Observable<void>{
     return this.http.delete<void>(`${this.apiUrl}/${servico.id}`);
   }
+
+  getById(id: string): Observable<Servico>{
+    return this.http.get<Servico>(`${this.apiUrl}/${id}`);
+  }
 }

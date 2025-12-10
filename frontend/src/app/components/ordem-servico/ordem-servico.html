@@ -1,16 +1,14 @@
 <div class="header-title">
-  <div class="container">
-    <h1><i class="fas fa-calendar-alt"></i> Realize seu Agendamento</h1>
+  
+    <h1 class="titulo"><i class="bi bi-calendar-check"></i> Realize seu Agendamento</h1>
     <p class="lead mb-0">Agende serviços de forma rápida e prática</p>
-  </div>
+  
 </div>
 
 <div class="container">
-  <form>
-
-    <!-- Informações do Responsável -->
-    <div class="form-container">
-      <h3 class="section-title"><i class="fas fa-user-circle me-2"></i>Informações do Responsável</h3>
+  
+  <div class="form-container">
+      <h3 class="section-title"><i class="fas fa-user-circle me-2"></i>Informações do Cliente</h3>
       <div class="row mt-4">
         <div class="col-md-8">
           <label class="form-label">Email</label>
@@ -26,7 +24,6 @@
           </button>
         </div>
       </div>
-
       <div class="row mt-4">
         <div class="col-md-6">
           <label class="form-label">Nome</label>
@@ -37,9 +34,14 @@
           <input type="text" class="form-control" readonly [value]="cliente?.telefone">
         </div>
       </div>
-    </div>
 
-    <!-- Informações do Atendimento -->
+  </div>  
+
+    
+      
+   
+
+  <form>
     <div class="form-container">
       <h3 class="section-title"><i class="fas fa-calendar-check me-2"></i>Informações do Atendimento</h3>
       <div class="row mt-4">
@@ -54,7 +56,7 @@
       </div>
     </div>
 
-    <!-- Seleção de Serviço -->
+
     <div class="form-container">
       <h3 class="section-title"><i class="fas fa-tools me-2"></i>Selecionar Serviço</h3>
       <div class="row mt-4">
@@ -63,7 +65,7 @@
           <select class="form-select" [(ngModel)]="servicoSelecionado" name="servicoSelecionado">
             <option value="" disabled selected>Selecione um serviço</option>
             <option *ngFor="let s of servicos" [ngValue]="s">
-              {{ s.nome }} — {{ s.valor }}
+              {{ s.nome }} — R$ {{ s.valor }}
             </option>
           </select>
         </div>
@@ -75,7 +77,7 @@
       </div>
     </div>
 
-    <!-- Listagem de Serviços -->
+ 
     <div class="form-container mt-4">
       <h3 class="section-title"><i class="fas fa-list-check me-2"></i>Listagem de Serviços Agendados</h3>
       <table class="table table-hover table-striped mt-2">
@@ -89,14 +91,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let s of servicosSelecionados; index as i">
-            <td>{{ i + 1 }}</td>
-            <td>{{ s.nome }}</td>
+          <tr *ngFor="let s of servicosSelecionados; index as i" class="servicos_listados">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td class="text-start">{{ s.nome }}</td>
             <td>{{ s.responsavel }}</td>
-            <td class="text-end">{{ s.valor }}</td>
+            <td class="text-end">R$ {{ s.valor }}</td>
             <td>
               <button type="button" class="btn btn-sm btn-outline-danger" (click)="removerServico(i)">
-                <i class="fas fa-trash"></i>
+                <i class="bi bi-trash-fill"></i>
               </button>
             </td>
           </tr>
@@ -108,7 +110,7 @@
           <button type="reset" class="btn btn-outline-secondary" (click)="limparFormulario()">Limpar</button>
         </div>
         <div>
-          <strong>Valor Total: {{ valorTotalExibir }}</strong>
+          <strong>Valor Total: R$ {{ valorTotalExibir }}</strong>
         </div>
       </div>
     </div>
