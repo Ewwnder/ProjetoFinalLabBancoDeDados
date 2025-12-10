@@ -1,7 +1,6 @@
 package com.example.demo.Controllers;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Entities.Servico;
 import com.example.demo.Services.ServicoService;
+import com.example.demo.dto.ServicoRequestDTO;
+import com.example.demo.dto.ServicoResponseDTO;
 
 @RestController
 @RequestMapping("/servicos")
@@ -27,8 +27,10 @@ public class ServiceController {
     @Autowired
     private ServicoService servicoService;
 
+    
+
     @GetMapping
-    public ResponseEntity<List<Servico>> filtrar(
+    public ResponseEntity<List<ServicoResponseDTO>> filtrar(
         @RequestParam(required = false) String tipo,
         @RequestParam(required = false) String busca,
         @RequestParam(required = false) String categoria,
@@ -37,14 +39,19 @@ public class ServiceController {
         return ResponseEntity.ok(servicoService.filtroContatos(tipo, busca, categoria, ordenarAZ));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ServicoResponseDTO> buscarPorId(@PathVariable String id){
+        return ResponseEntity.ok(servicoService.buscarPeloId(id));
+    }
+
     @PostMapping
-    public ResponseEntity<Servico> inserir(@RequestBody Servico servico){
+    public ResponseEntity<ServicoResponseDTO> inserir(@RequestBody ServicoRequestDTO servico){
         return ResponseEntity.created(null).body(servicoService.save(servico));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Servico> alterar(@PathVariable String id, @RequestBody Servico servico){
-        servico.setId(id);
+    public ResponseEntity<ServicoResponseDTO> alterar(@PathVariable String id, @RequestBody ServicoRequestDTO servico){
+        
         return ResponseEntity.ok(servicoService.save(servico));
     }
 

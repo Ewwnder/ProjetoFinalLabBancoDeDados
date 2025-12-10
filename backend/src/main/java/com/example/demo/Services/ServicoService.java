@@ -10,7 +10,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Entities.Servico;
+import com.example.demo.Entities.Responsavel;
 import com.example.demo.Repositories.ServicoRepository;
+import com.example.demo.Repositories.ResponsavelRepository;
+import com.example.demo.dto.ServicoRequestDTO;
+import com.example.demo.dto.ServicoResponseDTO;
+import com.example.demo.mapper.ServicoMapper;
 
 @Service
 public class ServicoService {
@@ -19,21 +24,56 @@ public class ServicoService {
     private ServicoRepository repositorioServico;
 
     @Autowired
+    private ResponsavelRepository responsavelRepository;
+
+    @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<Servico> getAll() {
-        return repositorioServico.findAll();
+    @Autowired
+    private ServicoMapper servicoMapper;
+
+    public List<ServicoResponseDTO> getAll() {
+        return repositorioServico.findAll().stream()
+        .map(s -> servicoMapper.toResponse(s))
+        .toList();
     }
 
-    public Servico save(Servico servico) {
-        return repositorioServico.save(servico);
+    public ServicoResponseDTO save(ServicoRequestDTO servicoRequestDTO) {
+        Servico servico = servicoMapper.toEntity(servicoRequestDTO);
+        return servicoMapper.toResponse(repositorioServico.save(servico));
+    }
+
+    public ServicoResponseDTO alterar(String id, ServicoRequestDTO servicoRequestDTO){
+           Servico servico = repositorioServico.findById(id).orElse(null);
+
+           if (servicoRequestDTO.nome() != null && !servicoRequestDTO.nome().isEmpty()) {
+                servico.setNome(servicoRequestDTO.nome());
+           }
+
+           if (servicoRequestDTO.categoria() != null && !servicoRequestDTO.categoria().isEmpty()) {
+                servico.setCategoria(servicoRequestDTO.categoria());
+            }
+
+            if (servicoRequestDTO.tipo() != null && !servicoRequestDTO.tipo().isEmpty()) {
+                servico.setTipo(servicoRequestDTO.tipo());
+            }
+
+            servico.setValor(servicoRequestDTO.valor());
+            servico.setCusto(servicoRequestDTO.custo());
+
+         if (servicoRequestDTO.responsavelId() != null && !servicoRequestDTO.responsavelId().isEmpty()) {
+            Responsavel responsavel = responsavelRepository.findById(servicoRequestDTO.responsavelId()).orElse(null);
+            servico.setResponsavel(responsavel);
+        }
+
+        return servicoMapper.toResponse(servico);
     }
 
     public void delete(String id) {
         repositorioServico.deleteById(id);
     }
 
-    public List<Servico> filtroContatos(String tipo, String busca, String categoria, Boolean ordenarAZ) {
+    public List<ServicoResponseDTO> filtroContatos(String tipo, String busca, String categoria, Boolean ordenarAZ) {
         Query query = new Query();
 
         if (tipo != null && !tipo.isEmpty()) {
@@ -52,6 +92,12 @@ public class ServicoService {
             query.with(Sort.by(Sort.Order.asc("nome")));
         }
 
-        return mongoTemplate.find(query, Servico.class);
+        return mongoTemplate.find(query, Servico.class).stream()
+            .map(s -> servicoMapper.toResponse(s))
+            .toList();
+    }
+
+    public ServicoResponseDTO buscarPeloId(String id) {
+        return servicoMapper.toResponse(repositorioServico.findById(id).orElse(null));
     }
 }

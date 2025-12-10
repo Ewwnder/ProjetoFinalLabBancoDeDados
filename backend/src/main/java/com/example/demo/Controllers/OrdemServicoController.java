@@ -41,4 +41,15 @@ public class OrdemServicoController {
     public ResponseEntity<List<OrdemServicoResponse>> listarTodasOrdensServicos(){
         return ResponseEntity.ok(ordemServicoService.listarOrdensServicos());
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<OrdemServicoResponse> listarPeloId(@PathVariable String id){
+        return ResponseEntity.ok(ordemServicoService.listarPeloId(id));
+    }
+
+    @DeleteMapping("{agendamentoId}/servicos/{servicoId}")
+    public ResponseEntity<Void> deletarServicoDoAgendamento(@PathVariable String agendamentoId, @PathVariable String servicoId){
+        ordemServicoService.deletarServicoDoAgendamento(agendamentoId, servicoId);
+        return ResponseEntity.noContent().build();
+    }
 }

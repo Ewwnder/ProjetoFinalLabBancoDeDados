@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { OrdemServicoRequest } from '../../../entity/ordemServicoRequest';
+import { AgendamentoRequest } from '../../../entity/agendamentoRequest';
 import { OrdemServicoService } from '../../services/ordem-servico.service';
 import { Servico } from '../../../entity/servico';
 import { ServicosService } from '../../services/servicos.service';
-import { Cliente } from '../../../entity/cliente';
+import { ClienteResponse } from '../../../entity/clienteResponse';
 import { ClienteService } from '../../services/cliente.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ClienteRequest } from '../../../entity/clienteRequest';
 
 @Component({
   standalone: true,
@@ -22,7 +23,7 @@ export class OrdemServico implements OnInit {
   email: string = '';
   data: string = '';
   hora: string = '';
-  cliente: Cliente | null = null;
+  cliente: ClienteResponse | null = null;
   servicoSelecionado: Servico | null = null;
   servicos: Servico[] = [];
   servicosSelecionados: Servico[] = [];
@@ -39,14 +40,24 @@ export class OrdemServico implements OnInit {
   }
 
   pesquisarCliente() {
-    if (!this.email) return;
-    this.gerenciarClienteServico.buscarPeloEmail(this.email).subscribe(res => {
-      this.cliente = res;
-    });
-  }
+      if (!this.email) return;
+      this.gerenciarClienteServico.buscarPeloEmail(this.email).subscribe({
+        next: (res) => {
+            this.cliente = res;
+          },
+        error: () => {
+          alert("Não foi encontrado nenhum cliente com esse e-mail");
+        }
+      });
+    }
 
   adicionarServico() {
     if (!this.servicoSelecionado) return;
+    const existe = this.servicosSelecionados.find(s => s.id === this.servicoSelecionado!.id);
+    if(existe){
+      alert("Serviço já foi adicionado");
+      return;
+    }
     this.servicosSelecionados.push(this.servicoSelecionado);
     this.valorTotalExibir += this.servicoSelecionado.valor;
     this.servicoSelecionado = null;
@@ -58,14 +69,22 @@ export class OrdemServico implements OnInit {
   }
 
   realizarAgendamento() {
-    if (!this.cliente) return alert("Selecione um cliente!");
+    if (!this.cliente ) return alert("Selecione um cliente!");
+    if(this.servicosSelecionados.length==0) return alert("Selecione algum serviço antes de realizar o agendamento");
+    
     const dataHora = new Date(`${this.data}T${this.hora}:00`);
-    const request: OrdemServicoRequest = {
+    const request: AgendamentoRequest = {
       dataHora,
-      responsavelId: this.cliente.id,
+      clienteId: this.cliente.id,
       servicosId: this.servicosSelecionados.map(s => s.id)
     };
-    this.gerenciarOrdemServico.salvar(request).subscribe(() => alert("Agendamento realizado!"));
+    this.gerenciarOrdemServico.salvar(request).subscribe({
+      next: () => {
+          alert("Agendamento realizado!");
+          this.limparFormulario();
+      }
+    })
+       
   }
 
   limparFormulario() {

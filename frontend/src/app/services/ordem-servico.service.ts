@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { OrdemServicoRequest } from '../../entity/ordemServicoRequest';
+import { AgendamentoRequest } from '../../entity/agendamentoRequest';
 import { Observable } from 'rxjs';
+import { AgendamentoResponse } from '../../entity/agendamentoResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,19 @@ export class OrdemServicoService {
 
   constructor(private http: HttpClient) { }
 
-  salvar(ordemServicoRequest: OrdemServicoRequest): Observable<void>{
+  salvar(ordemServicoRequest: AgendamentoRequest): Observable<void>{
     return this.http.post<void>(this.apiUrl, ordemServicoRequest);
+  }
+
+  listarTodos() : Observable<AgendamentoResponse[]>{
+    return this.http.get<AgendamentoResponse[]>(this.apiUrl);
+  }
+
+  deletar(id: string): Observable<void>{
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  deletarServico(agendamentoId: string, servicoId: string): Observable<void>{
+    return this.http.delete<void>(`${this.apiUrl}/${agendamentoId}/servicos/${servicoId}`)
   }
 }

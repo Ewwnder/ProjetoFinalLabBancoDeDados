@@ -5,6 +5,7 @@ import { ResponsavelComponent } from './components/responsavel/responsavel.compo
 import { ClienteComponent } from './components/cliente/cliente.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ListarOrdemServicosComponent } from './components/listar-ordem-servicos/listar-ordem-servicos.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'servicos', component: Servicos },
   { path: 'ordem-servico', component: OrdemServico },
   { path: 'responsavel', component: ResponsavelComponent },
-  { path: 'cliente', component: ClienteComponent}
+  { path: 'cliente', component: ClienteComponent},
+  {path: 'listar-ordens', component: ListarOrdemServicosComponent}
 ];

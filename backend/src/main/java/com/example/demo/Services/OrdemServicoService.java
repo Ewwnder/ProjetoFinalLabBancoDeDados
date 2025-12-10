@@ -22,6 +22,8 @@ public class OrdemServicoService {
 
     public void criarOrdemServico(OrdemServicoRequest ordemServicoRequest){
         OrdemServico ordemServico = ordemServicoMapper.toEntity(ordemServicoRequest);
+        
+
         ordemServicoRepository.save(ordemServico);
     }
 
@@ -33,6 +35,19 @@ public class OrdemServicoService {
 
     public void deletarOrdemServico(String id){
         ordemServicoRepository.deleteById(id);
+    }
+
+    public OrdemServicoResponse listarPeloId(String id) {
+        OrdemServico ordemServico = ordemServicoRepository.findById(id).orElse(null);
+        return ordemServicoMapper.toResponse(ordemServico);
+    }
+
+    public void deletarServicoDoAgendamento(String agendamentoId, String servicoId) {
+        OrdemServico ordemServico = ordemServicoRepository.findById(agendamentoId).orElse(null);
+
+        ordemServico.getListaServicos().removeIf(servico -> servico.getId().equals(servicoId));
+        
+        ordemServicoRepository.save(ordemServico);
     }
 
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Cliente } from '../../../entity/cliente'; 
+import { ClienteResponse } from '../../../entity/clienteResponse'; 
 import { ClienteService } from '../../services/cliente.service'; 
 import { ClienteRequest } from '../../../entity/clienteRequest';
 
@@ -14,7 +14,7 @@ import { ClienteRequest } from '../../../entity/clienteRequest';
 })
 export class ClienteComponent implements OnInit {
 
-  clientes: Cliente[] = []; 
+  clientes: ClienteResponse[] = []; 
   formularioCliente: FormGroup; 
 
   isEditando = false;
@@ -46,7 +46,7 @@ export class ClienteComponent implements OnInit {
     this.filtro.valueChanges.subscribe(() => this.carregarClientes());
   }
 
-  trackById(index: number, item: Cliente) {
+  trackById(index: number, item: ClienteResponse) {
     return item.id;
   }
 
@@ -56,13 +56,13 @@ export class ClienteComponent implements OnInit {
 
     this.servicoCliente.filtrar(busca, ordenarAZ)
       .subscribe({
-        next: (json: Cliente[]) => {
+        next: (json: ClienteResponse[]) => {
           this.clientes = json;
         }
       });
   }
   
-  get listaFiltrada(): Cliente[] {
+  get listaFiltrada(): ClienteResponse[] {
     const busca = this.filtro.get('busca')?.value?.toLowerCase() || '';
     const ordenarAZ = this.filtro.get('ordenarAZ')?.value;
 
@@ -85,7 +85,7 @@ export class ClienteComponent implements OnInit {
     this.formularioCliente.reset();
   }
 
-  iniciarEdicao(cliente: Cliente) {
+  iniciarEdicao(cliente: ClienteResponse) {
     this.isEditando = true;
     this.isAdicionando = false;
     this.formularioCliente.setValue(cliente); 
@@ -135,9 +135,9 @@ export class ClienteComponent implements OnInit {
   }
 
 
-  excluir(cliente: Cliente) {
+  excluir(cliente: ClienteResponse) {
     if (confirm(`Tem certeza que deseja excluir o cliente ${cliente.nome}?`)) {
-        this.servicoCliente.excluir(cliente).subscribe({
+        this.servicoCliente.excluir(cliente.id).subscribe({
             next: () => {
                 alert('Cliente excluído!');
                 this.carregarClientes();
