@@ -1,5 +1,6 @@
 package com.example.demo.Entities;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.persistence.Id;
@@ -18,17 +19,13 @@ public class Servico {
     private String id;
 
     private String nome;
-
     private String categoria;   
-
-
     private String tipo;
     private Double valor;
-
     private Double custo;
-
     
-    private String responsavel;
+    @DBRef
+    private Responsavel responsavel;
 
 
 }

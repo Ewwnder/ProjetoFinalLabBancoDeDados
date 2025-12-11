@@ -52,7 +52,7 @@ public class ServiceController {
     @PutMapping("/{id}")
     public ResponseEntity<ServicoResponseDTO> alterar(@PathVariable String id, @RequestBody ServicoRequestDTO servico){
         
-        return ResponseEntity.ok(servicoService.save(servico));
+        return ResponseEntity.ok(servicoService.alterar(id, servico));
     }
 
     @DeleteMapping("/{id}")
