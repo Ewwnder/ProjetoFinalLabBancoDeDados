@@ -20,21 +20,20 @@ import com.example.demo.dto.ServicoRequestDTO;
 import com.example.demo.dto.ServicoResponseDTO;
 
 @RestController
-@RequestMapping("/servicos")
+@RequestMapping("servicos")
 @CrossOrigin
 public class ServiceController {
     
     @Autowired
     private ServicoService servicoService;
 
-    
 
     @GetMapping
     public ResponseEntity<List<ServicoResponseDTO>> filtrar(
-        @RequestParam(required = false) String tipo,
-        @RequestParam(required = false) String busca,
-        @RequestParam(required = false) String categoria,
-        @RequestParam(required = false) Boolean ordenarAZ
+        @RequestParam(required = false, defaultValue="") String tipo,
+        @RequestParam(required = false, defaultValue="") String busca,
+        @RequestParam(required = false, defaultValue="") String categoria,
+        @RequestParam(required = false, defaultValue="false") Boolean ordenarAZ
     ) {
         return ResponseEntity.ok(servicoService.filtroContatos(tipo, busca, categoria, ordenarAZ));
     }

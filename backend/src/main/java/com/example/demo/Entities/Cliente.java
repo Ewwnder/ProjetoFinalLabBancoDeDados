@@ -27,7 +27,6 @@ public class Cliente {
 
     private String telefone;
 
-    private String sexo;
 
     private LocalDate dataCadastro;
 

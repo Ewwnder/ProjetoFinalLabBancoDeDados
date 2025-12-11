@@ -6,5 +6,5 @@ public record ResponsavelRequestDTO(
         String telefone,
         String cargo,
         String especialidade,
-        Double salario
+        double salario
 ) {}

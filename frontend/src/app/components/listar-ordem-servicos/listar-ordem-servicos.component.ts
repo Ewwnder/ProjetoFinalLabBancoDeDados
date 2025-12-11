@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AgendamentoResponse } from '../../../entity/agendamentoResponse';
-import { Servico } from '../../../entity/servico';
+import { ServicoResponse } from '../../../entity/servicoResponse';
 import { ServicosService } from '../../services/servicos.service';
 import { OrdemServicoService } from '../../services/ordem-servico.service';
 import { NgIf, NgFor } from '@angular/common';
@@ -16,9 +16,8 @@ import { RouterLink } from '@angular/router';
 })
 export class ListarOrdemServicosComponent implements OnInit{
   agendamentos: AgendamentoResponse[] = [];
-  agendamentosFiltrados: AgendamentoResponse[] = [];
   agendamentoSelecionado: AgendamentoResponse | null = null;
-  servicosDaOS: Servico[] = [];
+  servicosDaOS: ServicoResponse[] = [];
 
   constructor(private servicoService: ServicosService, private ordemServicoService: OrdemServicoService) {}
 
@@ -32,7 +31,7 @@ export class ListarOrdemServicosComponent implements OnInit{
     return item.dataHora;
   }
 
-  trackByServico(index: number, item: Servico) {
+  trackByServico(index: number, item: ServicoResponse) {
     return item.id;
   }
 
@@ -68,7 +67,7 @@ export class ListarOrdemServicosComponent implements OnInit{
     this.agendamentoSelecionado = null;
   }
 
-  removerServico(ag: AgendamentoResponse, s: Servico){
+  removerServico(ag: AgendamentoResponse, s: ServicoResponse){
     if(!confirm("Deseja remover o serviço do seu agendamento?")) return;
 
     this.ordemServicoService.deletarServico(ag.id, s.id).subscribe({

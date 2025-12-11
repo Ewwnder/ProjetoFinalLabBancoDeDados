@@ -14,18 +14,8 @@ export class ClienteService {
 
   constructor(private http: HttpClient) {}
 
-  filtrar(busca?: string, ordenarAZ?: boolean): Observable<ClienteResponse[]> {
-    let parametros = new HttpParams();
-
-    if (busca) {
-      parametros = parametros.set('busca', busca);
-    }
-
-    if (ordenarAZ !== undefined) {
-      parametros = parametros.set('ordenarAZ', ordenarAZ.toString());
-    }
-
-    return this.http.get<ClienteResponse[]>(this.apiUrl, { params: parametros });
+  listarTodos(): Observable<ClienteResponse[]> {
+    return this.http.get<ClienteResponse[]>(this.apiUrl);
   }
 
   salvar(cliente: ClienteRequest): Observable<void> {
@@ -40,7 +30,7 @@ export class ClienteService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-   buscarPeloEmail(email: string): Observable<ClienteResponse>{
+  buscarPeloEmail(email: string): Observable<ClienteResponse>{
     return this.http.get<ClienteResponse>(`${this.apiUrl}/${email}`)
   }
 }

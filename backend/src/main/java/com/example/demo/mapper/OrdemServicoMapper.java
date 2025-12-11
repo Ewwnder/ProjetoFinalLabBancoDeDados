@@ -26,7 +26,7 @@ public class OrdemServicoMapper {
     public OrdemServico toEntity(OrdemServicoRequest ordemServicoRequest){
         double valorTotal=0;
         OrdemServico ordemServico = new OrdemServico();
-        Cliente cliente = clienteRepository.findById(ordemServicoRequest.clienteId()).orElse(null);
+        Cliente cliente = clienteRepository.findById(ordemServicoRequest.clienteId()).orElseThrow(()-> new RuntimeException("CLIENTE NÃO ENCONTRADO"));
         ordemServico.setCliente(cliente);
         ordemServico.setDataAtendimento(ordemServicoRequest.dataHora());
         
@@ -34,7 +34,7 @@ public class OrdemServicoMapper {
         List<Servico> servicos = new ArrayList<>();
         
         for(String id : ordemServicoRequest.servicosId()){
-            Servico servico = servicoRepository.findById(id).orElse(null);
+            Servico servico = servicoRepository.findById(id).orElseThrow(()-> new RuntimeException("Serviço não encontrado"));
             servicos.add(servico);
             valorTotal+=servico.getValor();
         }
@@ -50,7 +50,6 @@ public class OrdemServicoMapper {
         List<String> idsServicos = ordemServico.getListaServicos().stream()
         .map(servico -> servico.getId())
         .toList();
-
 
         return new OrdemServicoResponse(
             ordemServico.getId(),

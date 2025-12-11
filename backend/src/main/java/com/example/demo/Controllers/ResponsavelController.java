@@ -3,6 +3,7 @@ package com.example.demo.Controllers;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,22 +39,30 @@ public class ResponsavelController {
 
     @GetMapping
     public List<ResponsavelResponseDTO> listarResponsaveis(){
-        return responsavelService.listarResponsaveis().stream().map(responsavelMapper::toResponse).toList();
+        return responsavelService.listarResponsaveis()
+        .stream()
+        .map(responsavelMapper::toResponse)
+        .toList();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponsavelResponseDTO buscarResponsavel(@PathVariable String id){
         return responsavelMapper.toResponse(responsavelService.buscarPorId(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public ResponsavelResponseDTO atualizarResponsavel(@PathVariable String id, @RequestBody ResponsavelRequestDTO dto){
         Responsavel att = responsavelService.atualizar(id, responsavelMapper.toEntity(dto));
         return responsavelMapper.toResponse(att);
     }
 
-
+    @DeleteMapping("{id}")
     public void deletarResponsavel(@PathVariable String id){
         responsavelService.excluirResponsavel(id);
+    }
+
+    @GetMapping("/nome/{nome}")
+    public ResponsavelResponseDTO buscarPeloNome(@PathVariable String nome){
+        return responsavelMapper.toResponse(responsavelService.buscarPeloNome(nome));
     }
 }

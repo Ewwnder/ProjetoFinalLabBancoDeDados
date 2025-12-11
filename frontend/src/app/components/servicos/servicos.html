@@ -12,12 +12,12 @@
         <div class="row g-2 align-items-center">
           <div class="col-md-6 col-lg-4">
             <label class="form-label">Filtrar</label>
-            <input formControlName="busca" type="text" class="form-control" placeholder="Buscar..." />
+            <input formControlName="busca" type="text" class="form-control" placeholder="Buscar..." (input)="loadServicos()"/>
           </div>
 
           <div class="col-md-6 col-lg-3">
             <label class="form-label">Tipo</label>
-            <select formControlName="tipo" class="form-select">
+            <select formControlName="tipo" class="form-select" (change)="loadServicos()">
               <option value="">Selecione</option>
               <option>Capilar</option>
               <option>Facial</option>
@@ -29,7 +29,7 @@
 
           <div class="col-md-6 col-lg-3">
             <label class="form-label">Categoria</label>
-            <select formControlName="categoria" class="form-select">
+            <select formControlName="categoria" class="form-select" (change)="loadServicos()">
               <option value="">Selecione</option>
               <option>Cabeleireiro</option>
               <option>Esteticista</option>
@@ -49,7 +49,7 @@
 
       <div *ngIf="isAdding || isEditing" class="card shadow-sm p-3 mb-4 border">
         <h5>{{ isAdding ? 'Acrescentar Serviço' : 'Editar Serviço' }}</h5>
-        <form [formGroup]="formGroupServico" (ngSubmit)="isAdding ? save() : update()">
+        <form [formGroup]="formGroupServico">
           <div class="row g-3">
             <div class="col-md-4">
               <label>Nome</label>
@@ -91,11 +91,11 @@
 
             <div class="col-md-6">
               <label>Responsável</label>
-              <input formControlName="responsavel" type="text" class="form-control" />
+              <input formControlName="responsavelNome" type="text" class="form-control" />
             </div>
 
             <div class="col-12 d-flex gap-2 mt-2">
-              <button type="submit" class="btn btn-success">Salvar</button>
+              <button type="button" class="btn btn-success" (click)="isAdding? save() : update()">Salvar</button>
               <button type="button" class="btn btn-secondary" (click)="clear()">Cancelar</button>
               <button *ngIf="isEditing" type="button" class="btn btn-danger ms-auto" (click)="delete(formGroupServico.value)">Excluir</button>
             </div>
@@ -119,14 +119,14 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let c of filtrarServicos; trackBy: trackById">
+            <tr *ngFor="let c of servicos; trackBy: trackById">
               <th>{{ c.id }}</th>
               <td>{{ c.nome }}</td>
               <td>{{ c.categoria }}</td>
               <td>{{ c.tipo }}</td>
               <td>{{ c.valor }}</td>
               <td>{{ c.custo }}</td>
-              <td>{{ c.responsavel }}</td>
+              <td>{{ c.responsavelNome }}</td>
               <td>
                 <button class="btn btn-sm btn-outline-primary" (click)="startEditing(c)">Editar</button>
               </td>

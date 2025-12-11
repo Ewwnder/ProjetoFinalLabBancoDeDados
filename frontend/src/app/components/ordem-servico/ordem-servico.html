@@ -94,7 +94,7 @@
           <tr *ngFor="let s of servicosSelecionados; index as i" class="servicos_listados">
             <td class="text-center">{{ i + 1 }}</td>
             <td class="text-start">{{ s.nome }}</td>
-            <td>{{ s.responsavel }}</td>
+            <td>{{ s.responsavelNome }}</td>
             <td class="text-end">R$ {{ s.valor }}</td>
             <td>
               <button type="button" class="btn btn-sm btn-outline-danger" (click)="removerServico(i)">

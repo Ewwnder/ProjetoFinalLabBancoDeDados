@@ -17,7 +17,6 @@ public class ClienteMapper {
         cliente.setNome(request.nome());
         cliente.setEmail(request.email());
         cliente.setTelefone(request.telefone());
-        cliente.setSexo(request.sexo());
         cliente.setDataNascimento(request.data_nascimento());
         cliente.setDataCadastro(LocalDate.now());
         cliente.setInformacoesAdicionais(request.informacoes());
@@ -30,7 +29,6 @@ public class ClienteMapper {
         cliente.getNome(), 
         cliente.getEmail(), 
         cliente.getTelefone(), 
-        cliente.getSexo(),
         cliente.getCpf(), 
         cliente.getDataCadastro(), 
         cliente.getDataNascimento(), 

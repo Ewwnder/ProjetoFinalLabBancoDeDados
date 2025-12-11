@@ -1,4 +1,4 @@
-export interface Responsavel{
+export interface ResponsavelResponse{
     id: string,
     nome: string,
     email: string,

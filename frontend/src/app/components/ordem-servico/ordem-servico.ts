@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AgendamentoRequest } from '../../../entity/agendamentoRequest';
 import { OrdemServicoService } from '../../services/ordem-servico.service';
-import { Servico } from '../../../entity/servico';
+import { ServicoResponse } from '../../../entity/servicoResponse';
 import { ServicosService } from '../../services/servicos.service';
 import { ClienteResponse } from '../../../entity/clienteResponse';
 import { ClienteService } from '../../services/cliente.service';
@@ -24,9 +24,9 @@ export class OrdemServico implements OnInit {
   data: string = '';
   hora: string = '';
   cliente: ClienteResponse | null = null;
-  servicoSelecionado: Servico | null = null;
-  servicos: Servico[] = [];
-  servicosSelecionados: Servico[] = [];
+  servicoSelecionado: ServicoResponse | null = null;
+  servicos: ServicoResponse[] = [];
+  servicosSelecionados: ServicoResponse[] = [];
   valorTotalExibir: number = 0;
 
   constructor(
