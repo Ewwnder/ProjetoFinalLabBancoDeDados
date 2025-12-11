@@ -38,12 +38,12 @@ public class OrdemServicoService {
     }
 
     public OrdemServicoResponse listarPeloId(String id) {
-        OrdemServico ordemServico = ordemServicoRepository.findById(id).orElse(null);
+        OrdemServico ordemServico = ordemServicoRepository.findById(id).orElseThrow(()-> new RuntimeException("Ordem Serviço não encontrada"));
         return ordemServicoMapper.toResponse(ordemServico);
     }
 
     public void deletarServicoDoAgendamento(String agendamentoId, String servicoId) {
-        OrdemServico ordemServico = ordemServicoRepository.findById(agendamentoId).orElse(null);
+        OrdemServico ordemServico = ordemServicoRepository.findById(agendamentoId).orElseThrow(()-> new RuntimeException("Ordem Serviço não encontrada"));
 
         ordemServico.getListaServicos().removeIf(servico -> servico.getId().equals(servicoId));
         

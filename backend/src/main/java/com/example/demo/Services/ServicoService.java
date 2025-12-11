@@ -9,10 +9,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.Entities.Servico;
 import com.example.demo.Entities.Responsavel;
-import com.example.demo.Repositories.ServicoRepository;
+import com.example.demo.Entities.Servico;
 import com.example.demo.Repositories.ResponsavelRepository;
+import com.example.demo.Repositories.ServicoRepository;
 import com.example.demo.dto.ServicoRequestDTO;
 import com.example.demo.dto.ServicoResponseDTO;
 import com.example.demo.mapper.ServicoMapper;
@@ -40,11 +40,15 @@ public class ServicoService {
 
     public ServicoResponseDTO save(ServicoRequestDTO servicoRequestDTO) {
         Servico servico = servicoMapper.toEntity(servicoRequestDTO);
+
+     
+       
+       
         return servicoMapper.toResponse(repositorioServico.save(servico));
     }
 
     public ServicoResponseDTO alterar(String id, ServicoRequestDTO servicoRequestDTO){
-           Servico servico = repositorioServico.findById(id).orElse(null);
+           Servico servico = repositorioServico.findById(id).orElseThrow(()-> new RuntimeException("Serviço não encontrado"));
 
            if (servicoRequestDTO.nome() != null && !servicoRequestDTO.nome().isEmpty()) {
                 servico.setNome(servicoRequestDTO.nome());
@@ -62,9 +66,11 @@ public class ServicoService {
             servico.setCusto(servicoRequestDTO.custo());
 
          if (servicoRequestDTO.responsavelId() != null && !servicoRequestDTO.responsavelId().isEmpty()) {
-            Responsavel responsavel = responsavelRepository.findById(servicoRequestDTO.responsavelId()).orElse(null);
+            Responsavel responsavel = responsavelRepository.findById(servicoRequestDTO.responsavelId()).orElseThrow(()-> new RuntimeException("Responsável não encontrado"));
             servico.setResponsavel(responsavel);
         }
+
+        repositorioServico.save(servico);
 
         return servicoMapper.toResponse(servico);
     }
@@ -98,6 +104,6 @@ public class ServicoService {
     }
 
     public ServicoResponseDTO buscarPeloId(String id) {
-        return servicoMapper.toResponse(repositorioServico.findById(id).orElse(null));
+        return servicoMapper.toResponse(repositorioServico.findById(id).orElseThrow(()-> new RuntimeException("Serviço não encontrado")));
     }
 }

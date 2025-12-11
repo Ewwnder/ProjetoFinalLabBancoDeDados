@@ -19,7 +19,7 @@ import com.example.demo.dto.OrdemServicoResponse;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/ordem-servico")
+@RequestMapping("ordem-servico")
 public class OrdemServicoController {
 
     @Autowired

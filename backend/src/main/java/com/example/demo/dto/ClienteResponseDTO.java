@@ -8,7 +8,6 @@ public record ClienteResponseDTO(
     String nome,
     String email,
     String telefone,
-    String sexo,
     String cpf,
     LocalDate data_cadastro,
     LocalDate data_nascimento,

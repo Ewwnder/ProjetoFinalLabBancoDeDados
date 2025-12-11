@@ -48,4 +48,8 @@ public class ResponsavelService {
 
         responsavelRepository.deleteById(id);
     }
+
+    public Responsavel buscarPeloNome(String nome) {
+        return responsavelRepository.findByNome(nome).orElseThrow(() -> new RuntimeException("Responsavel não encontrado"));
+    }
 }

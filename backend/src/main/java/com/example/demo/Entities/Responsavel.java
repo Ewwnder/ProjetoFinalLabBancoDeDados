@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@Document(collection = "responsavel")
+@Document(collection = "responsaveis")
 @Getter
 @Setter
 @EqualsAndHashCode (onlyExplicitlyIncluded = true)

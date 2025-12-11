@@ -29,12 +29,13 @@ public class ServicoMapper {
 
     public Servico toEntity(ServicoRequestDTO servicoRequestDTO){
         Servico servico = new Servico();
-        Responsavel responsavel = responsavelRepository.findById(servicoRequestDTO.responsavelId()).orElse(null);
+        Responsavel responsavel = responsavelRepository.findById(servicoRequestDTO.responsavelId()).orElseThrow(()-> new RuntimeException("Não encontrado o responsavel"));
         servico.setNome(servicoRequestDTO.nome());
         servico.setCategoria(servicoRequestDTO.categoria());
         servico.setTipo(servicoRequestDTO.tipo());
         servico.setValor(servicoRequestDTO.valor());
         servico.setCusto(servicoRequestDTO.custo());
+        servico.setResponsavel(responsavel);
 
         return servico;
     }
