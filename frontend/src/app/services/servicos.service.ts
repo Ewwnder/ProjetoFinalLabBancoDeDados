@@ -1,7 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Servico } from '../../entity/servico';
+import { ServicoResponse } from '../../entity/servicoResponse';
+import { ServicoRequest } from '../../entity/servicoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,11 @@ export class ServicosService {
 
   constructor(private http:HttpClient) { }
 
-  getAll(): Observable<Servico[]>{
-    return this.http.get<Servico[]>(this.apiUrl);
+  getAll(): Observable<ServicoResponse[]>{
+    return this.http.get<ServicoResponse[]>(this.apiUrl);
   }
 
-  filtrarServico(tipo?: string, busca?: string, categoria?: string, ordenarAZ?: boolean): Observable<Servico[]> {
+  filtrarServico(tipo?: string, busca?: string, categoria?: string, ordenarAZ?: boolean): Observable<ServicoResponse[]> {
     
     let servicoFiltrado = new HttpParams();
 
@@ -33,22 +34,22 @@ export class ServicosService {
       servicoFiltrado = servicoFiltrado.set('ordenarAZ', ordenarAZ.toString());
     }
 
-    return this.http.get<Servico[]>(`${this.apiUrl}`, { params: servicoFiltrado});
+    return this.http.get<ServicoResponse[]>(`${this.apiUrl}`, { params: servicoFiltrado});
   }
 
-  save(servico:Servico): Observable<Servico>{
-    return this.http.post<Servico>(this.apiUrl, servico);
+  save(servico:ServicoRequest): Observable<ServicoResponse>{
+    return this.http.post<ServicoResponse>(this.apiUrl, servico);
   }
 
-  update(servico:Servico): Observable<Servico>{
-    return this.http.put<Servico>(`${this.apiUrl}/${servico.id}`, servico);
+  update(servico:ServicoRequest, id: string): Observable<ServicoResponse>{
+    return this.http.put<ServicoResponse>(`${this.apiUrl}/${id}`, servico);
   }
 
-  delete(servico:Servico): Observable<void>{
+  delete(servico:ServicoResponse): Observable<void>{
     return this.http.delete<void>(`${this.apiUrl}/${servico.id}`);
   }
 
-  getById(id: string): Observable<Servico>{
-    return this.http.get<Servico>(`${this.apiUrl}/${id}`);
+  getById(id: string): Observable<ServicoResponse>{
+    return this.http.get<ServicoResponse>(`${this.apiUrl}/${id}`);
   }
 }

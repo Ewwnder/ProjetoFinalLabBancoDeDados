@@ -17,43 +17,7 @@
 
       <hr>
 
-      <form class="card shadow-sm p-3 mb-5 border-0" [formGroup]="filtro">
-        <div class="row g-3 align-items-end">
-          
-          <div class="col-md-8 col-lg-9">
-            <label class="form-label fw-semibold text-muted">Filtrar (Nome ou Email)</label>
-            <div class="input-group">
-              <span class="input-group-text bg-light border-end-0">
-                <i class="bi bi-search"></i>
-              </span>
-              <input
-                formControlName="busca"
-                type="text"
-                class="form-control border-start-0"
-                placeholder="Digite o nome ou email para buscar..."
-              />
-            </div>
-          </div>
-
-          <div class="col-md-4 col-lg-3 text-md-end">
-            <button 
-                type="button" 
-                class="btn btn-outline-secondary w-100" 
-                (click)="alternarOrdem()"
-            >
-              <i 
-                class="bi me-2" 
-                [ngClass]="{ 
-                  'bi-sort-alpha-down-alt': filtro.get('ordenarAZ')?.value, 
-                  'bi-sort-alpha-up-alt': !filtro.get('ordenarAZ')?.value 
-                }"
-              ></i>
-              Ordem: {{ filtro.get('ordenarAZ')?.value ? 'Nome (A-Z)' : 'Padrão (ID)' }}
-            </button>
-          </div>
-          
-        </div>
-      </form>
+      
 
       <div *ngIf="isAdicionando || isEditando" class="card shadow p-4 mb-5 border-0 bg-light">
         <h4 class="card-title mb-4 border-bottom pb-2">
@@ -135,7 +99,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let r of listaFiltrada; trackBy: trackById">
+              <tr *ngFor="let r of responsaveis; trackBy: trackById">
                 <th scope="row" class="text-primary ps-4">{{ r.id }}</th>
                 <td><span class="fw-semibold">{{ r.nome }}</span></td>
                 <td>{{ r.email }}</td>
@@ -159,7 +123,7 @@
           </table>
         </div>
         <div class="card-footer bg-white text-muted small text-end border-top-0">
-            Total de Registros: {{ listaFiltrada.length }}
+            Total de Registros: {{ responsaveis.length }}
         </div>
       </div>
 

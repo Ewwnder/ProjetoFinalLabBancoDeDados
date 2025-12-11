@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { Responsavel } from '../../../entity/responsavel';
+import { ResponsavelResponse } from '../../../entity/responsavelResponse';
 import { ResponsavelService } from '../../services/responsavel.service';
+import { ResponsavelRequest } from '../../../entity/responsavelRequest';
+import { escapeRegExp } from '@angular/compiler';
 
 @Component({
   selector: 'app-responsavel',
@@ -13,11 +15,12 @@ import { ResponsavelService } from '../../services/responsavel.service';
 })
 export class ResponsavelComponent implements OnInit {
 
-  responsaveis: Responsavel[] = [];
+  responsaveis: ResponsavelResponse[] = [];
   formulario: FormGroup;
-
+  responsavelRequest: ResponsavelRequest | null = null;
   isEditando = false;
   isAdicionando = false;
+  responsavelSelecionado: ResponsavelResponse | null = null;
 
   filtro: FormGroup;
 
@@ -41,20 +44,19 @@ export class ResponsavelComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarResponsaveis();
-    this.filtro.valueChanges.subscribe(() => this.carregarResponsaveis());
+    
   }
 
-  trackById(index: number, item: Responsavel) {
+  trackById(index: number, item: ResponsavelResponse) {
     return item.id;
   }
 
   carregarResponsaveis() {
-    const busca = this.filtro.get('busca')?.value;
-    const ordenarAZ = this.filtro.get('ordenarAZ')?.value;
 
-    this.servicoResponsavel.filtrar(busca, ordenarAZ)
+
+    this.servicoResponsavel.listarTodos()
       .subscribe({
-        next: (json: Responsavel[]) => {
+        next: (json: ResponsavelResponse[]) => {
           this.responsaveis = json;
         }
       });
@@ -65,33 +67,64 @@ export class ResponsavelComponent implements OnInit {
     this.formulario.reset();
   }
 
-  iniciarEdicao(responsavel: Responsavel) {
+  iniciarEdicao(responsavel: ResponsavelResponse) {
     this.isEditando = true;
     this.isAdicionando = false;
-    this.formulario.setValue(responsavel);
+    this.responsavelSelecionado = responsavel;
+     this.formulario.patchValue({
+        id: responsavel.id,
+        nome: responsavel.nome,
+        email: responsavel.email,
+        telefone: responsavel.telefone,
+        cargo: responsavel.cargo,
+        especialidade: responsavel.especialidade, 
+        salario: responsavel.salario
+     });
   }
 
   salvar() {
-    this.servicoResponsavel.salvar(this.formulario.value).subscribe({
+    this.buildRequest();
+
+    if(!this.responsavelRequest) return;
+
+    this.servicoResponsavel.salvar(this.responsavelRequest).subscribe({
       next: () => {
         this.carregarResponsaveis();
         this.limpar();
       }
     });
+    this.responsavelRequest = null;
+  }
+
+  buildRequest(){
+     this.responsavelRequest = {
+       nome: this.formulario.value.nome,
+       email: this.formulario.value.email,
+       telefone: this.formulario.value.telefone,
+       cargo: this.formulario.value.cargo,
+       especialidade: this.formulario.value.especialidade,
+       salario: this.formulario.value.salario,
+    }
   }
 
   atualizar() {
-    this.servicoResponsavel.atualizar(this.formulario.value).subscribe({
+    this.buildRequest();
+    if(!this.responsavelRequest || !this.responsavelSelecionado) return;
+    this.servicoResponsavel.atualizar(this.responsavelRequest, this.responsavelSelecionado?.id).subscribe({
       next: () => {
         this.carregarResponsaveis();
         this.limpar();
+        this.responsavelSelecionado = null;
       }
     });
   }
 
-  excluir(responsavel: Responsavel) {
+  excluir(responsavel: ResponsavelResponse) {
     this.servicoResponsavel.excluir(responsavel).subscribe({
-      next: () => this.carregarResponsaveis()
+      next: () => {
+        this.carregarResponsaveis();
+        this.limpar();
+      }
     });
   }
 
@@ -106,19 +139,5 @@ export class ResponsavelComponent implements OnInit {
     this.filtro.get('ordenarAZ')?.setValue(!atual);
   }
 
-  get listaFiltrada(): Responsavel[] {
-    const busca = this.filtro.get('busca')?.value?.toLowerCase() || '';
-    const ordenarAZ = this.filtro.get('ordenarAZ')?.value;
-
-    let lista = this.responsaveis.filter((r) =>
-      r.nome.toLowerCase().includes(busca) ||
-      r.email.toLowerCase().includes(busca)
-    );
-
-    if (ordenarAZ) {
-      lista = lista.sort((a, b) => a.nome.localeCompare(b.nome));
-    }
-
-    return lista;
-  }
+ 
 }

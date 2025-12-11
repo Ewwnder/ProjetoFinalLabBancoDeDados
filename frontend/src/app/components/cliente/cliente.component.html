@@ -78,42 +78,7 @@
         </form>
       </div>
 
-      <form class="card shadow-sm p-3 mb-4 border-0 bg-white" [formGroup]="filtro">
-        <div class="row g-3 align-items-center">
-          
-          <div class="col-md-7">
-            <div class="input-group">
-              <span class="input-group-text bg-light border-end-0">
-                <i class="bi bi-search"></i>
-              </span>
-              <input
-                formControlName="busca"
-                type="text"
-                class="form-control border-start-0"
-                placeholder="Buscar por Nome, Email ou CPF..."
-              />
-            </div>
-          </div>
-
-          <div class="col-md-5 text-end">
-            <button 
-                type="button" 
-                class="btn btn-outline-secondary w-100" 
-                (click)="alternarOrdem()"
-            >
-              <i 
-                class="bi me-2" 
-                [ngClass]="{ 
-                  'bi-sort-alpha-down-alt': filtro.get('ordenarAZ')?.value, 
-                  'bi-sort-alpha-up-alt': !filtro.get('ordenarAZ')?.value 
-                }"
-              ></i>
-              Ordenar: {{ filtro.get('ordenarAZ')?.value ? 'Nome (A-Z)' : 'Padrão (ID)' }}
-            </button>
-          </div>
-          
-        </div>
-      </form>
+    
 
       <div class="card p-0 shadow-lg border-0">
         <div class="table-responsive">
@@ -132,7 +97,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let c of listaFiltrada; trackBy: trackById">
+              <tr *ngFor="let c of clientes; trackBy: trackById">
                 <th scope="row" class="text-muted ps-4">{{ c.id }}</th>
                 <td><span class="fw-semibold">{{ c.nome }}</span></td>
                 <td>{{ c.email }}</td>
@@ -155,11 +120,11 @@
           </table>
         </div>
         <div class="card-footer bg-white text-muted small text-end border-top-0">
-            Total de Clientes: {{ listaFiltrada.length }}
+            Total de Clientes: {{ clientes.length }}
         </div>
       </div>
       
-      <div *ngIf="listaFiltrada.length === 0" class="alert alert-info text-center mt-3" role="alert">
+      <div *ngIf="clientes.length === 0" class="alert alert-info text-center mt-3" role="alert">
           <i class="bi bi-info-circle-fill me-2"></i>
           Nenhum cliente encontrado.
       </div>

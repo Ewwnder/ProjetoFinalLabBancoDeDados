@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ServicosService } from '../../services/servicos.service';
-import { Servico } from '../../../entity/servico';
+
+import { ResponsavelResponse } from '../../../entity/responsavelResponse';
+import { ResponsavelService } from '../../services/responsavel.service';
+import { ServicoRequest } from '../../../entity/servicoRequest';
+import { ServicoResponse } from '../../../entity/servicoResponse';
 
 @Component({
   selector: 'app-servicos',
@@ -12,14 +16,16 @@ import { Servico } from '../../../entity/servico';
   styleUrls: ['./servicos.css'],
 })
 export class Servicos implements OnInit {
-  Servico: Servico[] = [];
+  servicos: ServicoResponse[] = [];
+  servicoSelecionado: ServicoResponse | null = null;
   formGroupServico: FormGroup;
   isEditing = false;
   isAdding = false;
-
+  servicoRequest: ServicoRequest | null = null;
+  responsavel: ResponsavelResponse | null = null;
   filtro: FormGroup;
 
-  constructor(private gerenciarServicos: ServicosService, private formBuilder: FormBuilder) {
+  constructor(private gerenciarServicos: ServicosService, private formBuilder: FormBuilder, private gerenciarResponsaveis: ResponsavelService) {
     this.formGroupServico = this.formBuilder.group({
       id: [''],
       nome: [''],
@@ -27,7 +33,7 @@ export class Servicos implements OnInit {
       tipo: [''],
       valor: [''],
       custo: [''],
-      responsavel: [''],
+      responsavelNome: [''],
     });
 
     this.filtro = this.formBuilder.group({
@@ -43,19 +49,19 @@ export class Servicos implements OnInit {
     this.filtro.valueChanges.subscribe(() => this.loadServicos());
   }
 
-  trackById(index: number, item: Servico) {
+  trackById(index: number, item: ServicoResponse) {
     return item.id;
   }
 
   loadServicos() {
-    const tipo = this.filtro.get('tipo')?.value;
-    const busca = this.filtro.get('busca')?.value;
-    const categoria = this.filtro.get('categoria')?.value;
-    const ordenarAZ = this.filtro.get('ordenarAZ')?.value;
+    const tipo = this.filtro.value.tipo;
+    const categoria = this.filtro.value.categoria;
+    const busca = this.filtro.value.busca;
+    const ordenarAZ = this.filtro.value.ordenarAZ;
 
     this.gerenciarServicos
       .filtrarServico(tipo, busca, categoria, ordenarAZ)
-      .subscribe({ next: (json) => (this.Servico = json) });
+      .subscribe({ next: (json) => (this.servicos = json) });
   }
 
   startAdding() {
@@ -63,31 +69,78 @@ export class Servicos implements OnInit {
     this.formGroupServico.reset();
   }
 
-  startEditing(servico: Servico) {
+  startEditing(servico: ServicoResponse) {
     this.isEditing = true;
     this.isAdding = false;
-    this.formGroupServico.setValue(servico);
+    this.servicoSelecionado = servico;
+    this.formGroupServico.patchValue({
+        id: servico.id,
+        nome: servico.nome,
+        categoria: servico.categoria,
+        tipo: servico.tipo,
+        valor: servico.valor,
+        custo: servico.custo,
+        responsavelNome: servico.responsavelNome
+    });
   }
 
   save() {
-    this.gerenciarServicos.save(this.formGroupServico.value).subscribe({
-      next: () => {
-        this.loadServicos();
-        this.clear();
-      },
+  this.gerenciarResponsaveis.getByNome(this.formGroupServico.value.responsavelNome)
+    .subscribe({
+      next: (json: ResponsavelResponse) => {
+        this.responsavel = json;
+
+        this.buildRequest();
+
+        if (!this.servicoRequest) return;
+
+        this.gerenciarServicos.save(this.servicoRequest)
+          .subscribe({
+            next: () => {
+              this.loadServicos();
+              this.clear();
+              this.servicoRequest = null;
+            },
+            error: ()=> alert("erro")
+          });
+
+      }
     });
+}
+
+  buildRequest(){
+    if(!this.responsavel) return;
+    this.servicoRequest = {
+      nome: this.formGroupServico.value.nome,
+      categoria: this.formGroupServico.value.categoria,
+      tipo: this.formGroupServico.value.tipo,
+      valor: this.formGroupServico.value.valor,
+      custo: this.formGroupServico.value.custo,
+      responsavelId: this.responsavel.id,
+   
   }
+}
 
   update() {
-    this.gerenciarServicos.update(this.formGroupServico.value).subscribe({
-      next: () => {
-        this.loadServicos();
-        this.clear();
-      },
-    });
-  }
+  this.gerenciarResponsaveis.getByNome(this.formGroupServico.value.responsavelNome).subscribe({
+    next: (json) => {
+      this.responsavel = json;
 
-  delete(servico: Servico) {
+      this.buildRequest();
+      if (!this.servicoRequest || !this.servicoSelecionado) return;
+
+      this.gerenciarServicos.update(this.servicoRequest, this.servicoSelecionado.id)
+        .subscribe(() => {
+          this.loadServicos();
+          this.clear();
+          this.servicoRequest = null;
+          this.servicoSelecionado = null;
+        });
+    }
+  });
+}
+
+  delete(servico: ServicoResponse) {
     this.gerenciarServicos.delete(servico).subscribe({ next: () => this.loadServicos() });
   }
 
@@ -102,14 +155,5 @@ export class Servicos implements OnInit {
     this.filtro.get('ordenarAZ')?.setValue(!atual);
   }
 
-  get filtrarServicos(): Servico[] {
-    const tipo = this.filtro.get('tipo')?.value;
-    const categoria = this.filtro.get('categoria')?.value;
-
-    return this.Servico.filter((s) => {
-      const tipoMatch = tipo ? s.tipo === tipo : true;
-      const categoriaMatch = categoria ? s.categoria === categoria : true;
-      return tipoMatch && categoriaMatch;
-    });
-  }
+  
 }
