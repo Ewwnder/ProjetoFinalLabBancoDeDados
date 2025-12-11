@@ -72,7 +72,7 @@ export class OrdemServico implements OnInit {
     if (!this.cliente ) return alert("Selecione um cliente!");
     if(this.servicosSelecionados.length==0) return alert("Selecione algum serviço antes de realizar o agendamento");
     
-    const dataHora = new Date(`${this.data}T${this.hora}:00`);
+    const dataHora = new Date(`${this.data}T${this.hora}:00-03:00`);
     const request: AgendamentoRequest = {
       dataHora,
       clienteId: this.cliente.id,

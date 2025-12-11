@@ -4,12 +4,13 @@ import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup } from '@angul
 import { ResponsavelResponse } from '../../../entity/responsavelResponse';
 import { ResponsavelService } from '../../services/responsavel.service';
 import { ResponsavelRequest } from '../../../entity/responsavelRequest';
-import { escapeRegExp } from '@angular/compiler';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-responsavel',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgxMaskDirective],
+  providers: [provideNgxMask()],
   templateUrl: './responsavel.component.html',
   styleUrls: ['./responsavel.component.css'],
 })
@@ -44,7 +45,6 @@ export class ResponsavelComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarResponsaveis();
-    
   }
 
   trackById(index: number, item: ResponsavelResponse) {
@@ -52,8 +52,6 @@ export class ResponsavelComponent implements OnInit {
   }
 
   carregarResponsaveis() {
-
-
     this.servicoResponsavel.listarTodos()
       .subscribe({
         next: (json: ResponsavelResponse[]) => {
@@ -64,6 +62,7 @@ export class ResponsavelComponent implements OnInit {
 
   iniciarAdicao() {
     this.isAdicionando = true;
+    this.isEditando = false;
     this.formulario.reset();
   }
 
@@ -71,21 +70,21 @@ export class ResponsavelComponent implements OnInit {
     this.isEditando = true;
     this.isAdicionando = false;
     this.responsavelSelecionado = responsavel;
-     this.formulario.patchValue({
-        id: responsavel.id,
-        nome: responsavel.nome,
-        email: responsavel.email,
-        telefone: responsavel.telefone,
-        cargo: responsavel.cargo,
-        especialidade: responsavel.especialidade, 
-        salario: responsavel.salario
-     });
+
+    this.formulario.patchValue({
+      id: responsavel.id,
+      nome: responsavel.nome,
+      email: responsavel.email,
+      telefone: responsavel.telefone,
+      cargo: responsavel.cargo,
+      especialidade: responsavel.especialidade,
+      salario: responsavel.salario
+    });
   }
 
   salvar() {
     this.buildRequest();
-
-    if(!this.responsavelRequest) return;
+    if (!this.responsavelRequest) return;
 
     this.servicoResponsavel.salvar(this.responsavelRequest).subscribe({
       next: () => {
@@ -93,24 +92,26 @@ export class ResponsavelComponent implements OnInit {
         this.limpar();
       }
     });
+
     this.responsavelRequest = null;
   }
 
-  buildRequest(){
-     this.responsavelRequest = {
-       nome: this.formulario.value.nome,
-       email: this.formulario.value.email,
-       telefone: this.formulario.value.telefone,
-       cargo: this.formulario.value.cargo,
-       especialidade: this.formulario.value.especialidade,
-       salario: this.formulario.value.salario,
-    }
+  buildRequest() {
+    this.responsavelRequest = {
+      nome: this.formulario.value.nome,
+      email: this.formulario.value.email,
+      telefone: this.formulario.value.telefone,
+      cargo: this.formulario.value.cargo,
+      especialidade: this.formulario.value.especialidade,
+      salario: this.formulario.value.salario,
+    };
   }
 
   atualizar() {
     this.buildRequest();
-    if(!this.responsavelRequest || !this.responsavelSelecionado) return;
-    this.servicoResponsavel.atualizar(this.responsavelRequest, this.responsavelSelecionado?.id).subscribe({
+    if (!this.responsavelRequest || !this.responsavelSelecionado) return;
+
+    this.servicoResponsavel.atualizar(this.responsavelRequest, this.responsavelSelecionado.id).subscribe({
       next: () => {
         this.carregarResponsaveis();
         this.limpar();
@@ -138,6 +139,4 @@ export class ResponsavelComponent implements OnInit {
     const atual = this.filtro.get('ordenarAZ')?.value;
     this.filtro.get('ordenarAZ')?.setValue(!atual);
   }
-
- 
 }

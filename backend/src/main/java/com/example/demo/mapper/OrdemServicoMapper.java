@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class OrdemServicoMapper {
         Cliente cliente = clienteRepository.findById(ordemServicoRequest.clienteId()).orElseThrow(()-> new RuntimeException("CLIENTE NÃO ENCONTRADO"));
         ordemServico.setCliente(cliente);
         ordemServico.setDataAtendimento(ordemServicoRequest.dataHora());
+
         
        
         List<Servico> servicos = new ArrayList<>();

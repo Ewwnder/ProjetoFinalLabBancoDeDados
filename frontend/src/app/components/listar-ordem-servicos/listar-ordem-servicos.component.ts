@@ -81,4 +81,8 @@ export class ListarOrdemServicosComponent implements OnInit{
       }
     })
   }
+
+  formatarData(dataHora: string): string {
+      return new Date(dataHora).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  }
 }

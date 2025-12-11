@@ -47,11 +47,16 @@ public class OrdemServicoService {
         OrdemServico ordemServico = ordemServicoRepository.findById(agendamentoId).orElseThrow(()-> new RuntimeException("Ordem Serviço não encontrada"));
 
         ordemServico.getListaServicos().removeIf(servico -> servico.getId().equals(servicoId));
+        if(ordemServico.getListaServicos().size()==0){
+            ordemServicoRepository.delete(ordemServico);
+            return;
+        }
         double valor = ordemServico.getListaServicos()
         .stream()
         .mapToDouble(Servico::getValor)
         .sum();
 
+        
         ordemServico.setValorTotal(valor);
         ordemServicoRepository.save(ordemServico);
     }
