@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Entities.OrdemServico;
+import com.example.demo.Entities.Servico;
 import com.example.demo.Repositories.OrdemServicoRepository;
 import com.example.demo.dto.OrdemServicoRequest;
 import com.example.demo.dto.OrdemServicoResponse;
@@ -46,7 +47,12 @@ public class OrdemServicoService {
         OrdemServico ordemServico = ordemServicoRepository.findById(agendamentoId).orElseThrow(()-> new RuntimeException("Ordem Serviço não encontrada"));
 
         ordemServico.getListaServicos().removeIf(servico -> servico.getId().equals(servicoId));
-        
+        double valor = ordemServico.getListaServicos()
+        .stream()
+        .mapToDouble(Servico::getValor)
+        .sum();
+
+        ordemServico.setValorTotal(valor);
         ordemServicoRepository.save(ordemServico);
     }
 
